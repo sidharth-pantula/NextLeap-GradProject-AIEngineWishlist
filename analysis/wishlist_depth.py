@@ -168,3 +168,7 @@ class WishlistDepthEngine:
                 "key_finding": "Converting shoppers engage in +49.1% more product page comparisons (32.8 vs 22.0 pages) and actively cross-reference styling and marketplace prices before finalizing their choice."
             }
         }
+
+    def get_wishlist_depth_metrics(self) -> Dict[str, Any]:
+        """Alias returning depth and dormancy analysis."""
+        return self.get_depth_and_dormancy_analysis()
