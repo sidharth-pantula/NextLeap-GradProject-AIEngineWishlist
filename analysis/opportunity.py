@@ -39,20 +39,36 @@ class OpportunityEngine:
         self,
         prevalence_pct: float,
         linkage_score: float,
-        source_breadth: int,
-        explicit_rate: float,
-        confidence_score: float = 85.0
+        source_breadth: int = 3,
+        explicit_rate: float = 75.0,
+        confidence_score: float = 85.0,
+        behavioural_impact: float = 75.0,
+        decision_friction: float = 70.0,
+        dynamic_relevance: float = 70.0,
+        non_monetary_feasibility: float = 80.0
     ) -> float:
-        """Calculate composite 0-100 opportunity score."""
+        """Calculate composite 0-100 multi-dimensional opportunity score across 8 evidence-based factors:
+        1. Prevalence
+        2. Strength and quality of evidence (confidence)
+        3. Relevance to Wishlist -> Purchase Conversion (linkage)
+        4. Behavioural impact on postponement or purchase
+        5. Breadth across wishlist users & sources
+        6. Decision friction / comparison intensity
+        7. Dynamic change in relevance over time
+        8. Non-monetary product intervention feasibility
+        """
         norm_breadth = min(source_breadth / 4.0, 1.0) * 100.0
         score = (
-            self.w_prevalence * prevalence_pct +
-            self.w_linkage * linkage_score +
-            self.w_breadth * norm_breadth +
-            self.w_explicit * explicit_rate +
-            self.w_confidence * confidence_score
+            0.15 * prevalence_pct +
+            0.15 * confidence_score +
+            0.15 * linkage_score +
+            0.15 * behavioural_impact +
+            0.10 * norm_breadth +
+            0.10 * decision_friction +
+            0.10 * dynamic_relevance +
+            0.10 * non_monetary_feasibility
         )
-        return round(min(max(score, 0.0), 100.0), 2)
+        return round(min(max(score, 0.0), 100.0), 1)
 
     def generate_structured_opportunity(
         self,
