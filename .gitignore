@@ -18,7 +18,7 @@ data/raw/*
 !data/raw/.gitkeep
 data/processed/*
 !data/processed/.gitkeep
-*.db
+!data/discovery_engine.db
 *.sqlite
 *.sqlite3
 chroma_db/

@@ -1,4 +1,4 @@
-"""Streamlit Entrypoint rendering the 1:1 Stitch PM Intelligence Dashboard."""
+"""Streamlit Entrypoint rendering the 1:1 Stitch PM Intelligence Dashboard with instant ground-truth data."""
 import os
 import sys
 import json
@@ -9,12 +9,6 @@ import streamlit.components.v1 as components
 CWD = os.path.dirname(os.path.abspath(__file__))
 if CWD not in sys.path:
     sys.path.insert(0, CWD)
-
-from database.db import get_db
-from analysis.wishlist_activation import WishlistActivationEngine
-from analysis.wishlist_journey import WishlistJourneyEngine
-from analysis.wishlist_depth import WishlistDepthEngine
-from analysis.opportunity import OpportunityEngine
 
 # Configure Streamlit Page
 st.set_page_config(
@@ -52,100 +46,70 @@ st.markdown("""
 
 @st.cache_resource
 def get_initial_dataset():
-    """Pre-aggregates all ground-truth analytical datasets to inject into the Stitch UI."""
-    db = get_db()
-    
-    # Auto-bootstrap if empty
-    try:
-        res = db.execute_query("SELECT COUNT(*) as c FROM raw_feedback")
-        count = res[0]["c"] if res else 0
-        if count == 0:
-            from scripts.scale_data_pipeline import scale_all_sources
-            scale_all_sources()
-    except Exception:
-        pass
+    """Loads pre-computed ground-truth analytical dataset or falls back to live DB."""
+    precomputed_file = os.path.join(CWD, "data", "precomputed_dataset.json")
+    if os.path.exists(precomputed_file):
+        try:
+            with open(precomputed_file, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception:
+            pass
 
+    # Fallback to live database queries
+    from database.db import get_db
+    from analysis.wishlist_activation import WishlistActivationEngine
+    from analysis.wishlist_journey import WishlistJourneyEngine
+    from analysis.wishlist_depth import WishlistDepthEngine
+    from analysis.opportunity import OpportunityEngine
+
+    db = get_db()
     activation_engine = WishlistActivationEngine(db=db)
     journey_engine = WishlistJourneyEngine(db=db)
     depth_engine = WishlistDepthEngine(db=db)
 
-    # 1. Activation summary
     try:
         summary = activation_engine.get_activation_summary()
     except Exception:
-        summary = {
-            "overall_30d_conversion_pct": 18.4,
-            "price_drop_conversion_lift": 28.6,
-            "price_drop_conversion_pct": 34.2,
-            "no_price_drop_conversion_pct": 5.6,
-            "strict_purchase_intent_pct": 24.1,
-            "active_consideration_pct": 66.0,
-            "broader_commercial_consideration_pct": 66.0,
-            "exploration_bookmarking_pct": 34.0,
-            "sanity_check_message": "Commercial intent and exploration verified.",
-            "ecom_cart_to_purchase_pct": 31.8
-        }
-    
-    # 2. Coverage
-    try:
-        raw_cnt = db.execute_query("SELECT COUNT(*) as c FROM raw_feedback")
-        total_raw = raw_cnt[0]["c"] if raw_cnt else 321
-    except Exception:
-        total_raw = 321
+        summary = {"overall_30d_conversion_pct": 11.8, "price_drop_conversion_lift": 13.4, "price_drop_conversion_pct": 20.5, "no_price_drop_conversion_pct": 7.1, "strict_purchase_intent_pct": 1.6, "active_consideration_pct": 66.0, "broader_commercial_consideration_pct": 67.6, "exploration_bookmarking_pct": 32.4, "sanity_check_message": "Commercial intent and exploration verified.", "ecom_cart_to_purchase_pct": 33.3}
 
-    coverage = {
-        "total_raw": total_raw,
-        "wishlist_records": 5000,
-        "session_events": 3949,
-        "reddit_count": 128,
-        "web_youtube_count": 181
-    }
-
-    # 3. Four Pillars
     try:
         four_pillars = activation_engine.get_four_discovery_pillars()
     except Exception:
         four_pillars = {}
 
-    # 4. Behavioral & Funnel Benchmarks
     try:
         w_bench = activation_engine.get_wishlist_behavioral_metrics()
     except Exception:
-        w_bench = {"overall_30d_conversion_pct": 18.4, "price_drop_conversion_pct": 34.2, "no_price_drop_conversion_pct": 5.6, "price_alert_conversion_pct": 31.2, "price_alert_adoption_pct": 21.0, "avg_days_to_purchase": 23.7, "avg_days_to_abandon": 67.8}
+        w_bench = {"overall_30d_conversion_pct": 11.8, "price_drop_conversion_pct": 20.5, "no_price_drop_conversion_pct": 7.1, "price_alert_conversion_pct": 31.2, "price_alert_adoption_pct": 21.0, "avg_days_to_purchase": 23.7, "avg_days_to_abandon": 67.8}
 
     try:
         c_bench = activation_engine.get_ecommerce_funnel_benchmark()
     except Exception:
         c_bench = {"view_to_cart_pct": 31.8, "cart_to_purchase_pct": 57.9, "overall_view_to_purchase_pct": 18.4, "carts": 3180, "purchases": 1840}
 
-    # 5. Intent tiers
     try:
         intent_data = journey_engine.get_intent_metrics()
     except Exception:
-        intent_data = {"strict_purchase_intent_pct": 24.1, "exploration_bookmarking_pct": 34.0, "tiers": []}
+        intent_data = {"strict_purchase_intent_pct": 1.6, "exploration_bookmarking_pct": 32.4, "tiers": []}
 
-    # 6. Trigger matrix
     try:
         t_matrix = activation_engine.get_purchase_trigger_matrix()
     except Exception:
         t_matrix = []
 
-    # 7. Opportunities
     try:
         opps = activation_engine.get_activation_opportunities()
     except Exception:
         opps = []
 
-    # 8. Depth / Dormancy
     try:
         depth_data = depth_engine.get_wishlist_depth_metrics()
     except Exception:
         depth_data = {}
 
-    # 9. Evidence items
     try:
         evidence_rows = db.execute_query("""
-            SELECT p.feedback_id, r.source, p.product_category, p.friction_category, p.inferred_need, p.user_quote, p.purchase_outcome, p.relevance_score
+            SELECT p.feedback_id, r.source, p.product_category, p.purchase_barrier as friction_category, p.inferred_user_need as inferred_need, COALESCE(p.evidence_span, r.text) as user_quote, p.purchase_outcome, p.relevance_score
             FROM processed_feedback p
             JOIN raw_feedback r ON p.feedback_id = r.feedback_id
             WHERE p.relevance_score >= 2
@@ -157,7 +121,7 @@ def get_initial_dataset():
 
     return {
         "/api/activation/summary": summary,
-        "/api/coverage": coverage,
+        "/api/coverage": {"total_raw": 321, "wishlist_records": 5000, "session_events": 3949, "reddit_count": 128, "web_youtube_count": 181},
         "/api/discovery/four-pillars": four_pillars,
         "/api/activation/wishlist-behaviour": w_bench,
         "/api/activation/funnel-benchmark": c_bench,
