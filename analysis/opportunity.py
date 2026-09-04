@@ -38,35 +38,49 @@ class OpportunityEngine:
     def calculate_opportunity_score(
         self,
         prevalence_pct: float,
-        linkage_score: float,
-        source_breadth: int = 3,
-        explicit_rate: float = 75.0,
-        confidence_score: float = 85.0,
-        behavioural_impact: float = 75.0,
+        conversion_relevance: float = 80.0,
         decision_friction: float = 70.0,
-        dynamic_relevance: float = 70.0,
-        non_monetary_feasibility: float = 80.0
+        dormancy_impact: float = 70.0,
+        user_journey_breadth: float = 75.0,
+        dynamic_relevance_shift: float = 70.0,
+        non_monetary_fit: float = 80.0,
+        # Backward-compatibility aliases
+        linkage_score: Optional[float] = None,
+        source_breadth: Optional[int] = None,
+        explicit_rate: Optional[float] = None,
+        confidence_score: Optional[float] = None,
+        behavioural_impact: Optional[float] = None,
+        dynamic_relevance: Optional[float] = None,
+        non_monetary_feasibility: Optional[float] = None
     ) -> float:
-        """Calculate composite 0-100 multi-dimensional opportunity score across 8 evidence-based factors:
-        1. Prevalence
-        2. Strength and quality of evidence (confidence)
-        3. Relevance to Wishlist -> Purchase Conversion (linkage)
-        4. Behavioural impact on postponement or purchase
-        5. Breadth across wishlist users & sources
-        6. Decision friction / comparison intensity
-        7. Dynamic change in relevance over time
-        8. Non-monetary product intervention feasibility
+        """Calculate composite 0-100 multi-dimensional opportunity score across 7 evidence-based dimensions:
+        1. Direct relevance to the Wishlist -> Purchase Conversion problem (Weight: 0.20)
+        2. Impact on users' ability to evaluate, compare and decide among saved products (Weight: 0.18)
+        3. Persistence/re-emergence of problem & wishlist dormancy/staleness (Weight: 0.16)
+        4. Breadth across wishlist users & journey rather than single product attribute (Weight: 0.14)
+        5. Evidence of changing relevance over time as user context shifts (Weight: 0.12)
+        6. Fit with a scalable, non-monetary product intervention (Weight: 0.10)
+        7. Raw prevalence across evidence (retained but balanced, Weight: 0.10)
         """
-        norm_breadth = min(source_breadth / 4.0, 1.0) * 100.0
+        # Handle backward-compatibility parameter mappings
+        cr = linkage_score if linkage_score is not None else conversion_relevance
+        df = decision_friction
+        di = behavioural_impact if (dormancy_impact == 70.0 and behavioural_impact is not None) else dormancy_impact
+        if source_breadth is not None:
+            ujb = min(source_breadth / 4.0, 1.0) * 100.0
+        else:
+            ujb = user_journey_breadth
+        dr = dynamic_relevance if dynamic_relevance is not None else dynamic_relevance_shift
+        nmf = non_monetary_feasibility if non_monetary_feasibility is not None else non_monetary_fit
+
         score = (
-            0.15 * prevalence_pct +
-            0.15 * confidence_score +
-            0.15 * linkage_score +
-            0.15 * behavioural_impact +
-            0.10 * norm_breadth +
-            0.10 * decision_friction +
-            0.10 * dynamic_relevance +
-            0.10 * non_monetary_feasibility
+            0.10 * prevalence_pct +
+            0.20 * cr +
+            0.18 * df +
+            0.16 * di +
+            0.14 * ujb +
+            0.12 * dr +
+            0.10 * nmf
         )
         return round(min(max(score, 0.0), 100.0), 1)
 

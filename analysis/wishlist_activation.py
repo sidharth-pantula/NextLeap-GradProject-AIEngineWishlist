@@ -350,47 +350,45 @@ class WishlistActivationEngine:
 
     def get_activation_opportunities(self) -> List[Dict[str, Any]]:
         """Return prioritized discovery opportunities combining problem clusters with decision journey findings.
-        Scores are calculated dynamically across 8 evidence-based factors:
-        1. Prevalence %
-        2. Strength and quality of evidence (confidence)
-        3. Relevance to Wishlist -> Purchase Conversion (linkage)
-        4. Behavioural impact on postponement or purchase
-        5. Breadth across wishlist users & sources
-        6. Decision friction / comparison intensity
-        7. Dynamic change in relevance over time
-        8. Non-monetary product intervention feasibility
+        Scores are calculated dynamically across 7 evidence-based dimensions:
+        1. Direct relevance to the Wishlist -> Purchase Conversion problem (Weight: 0.20)
+        2. Impact on users' ability to evaluate, compare and decide among saved products (Weight: 0.18)
+        3. Persistence/re-emergence of problem & wishlist dormancy/staleness (Weight: 0.16)
+        4. Breadth across wishlist users & journey rather than single product attribute (Weight: 0.14)
+        5. Evidence of changing relevance over time as user context shifts (Weight: 0.12)
+        6. Fit with a scalable, non-monetary product intervention (Weight: 0.10)
+        7. Raw prevalence across evidence (retained but balanced, Weight: 0.10)
         """
         from analysis.opportunity import OpportunityEngine
         opp_engine = OpportunityEngine(db=self.db)
 
-        # 1. Primary Strategic Opportunity: Wishlist Relevance & Decision Prioritization
+        # 1. Primary Strategic Opportunity: Wishlist Relevance & Decision-Making
         opp_1_score = opp_engine.calculate_opportunity_score(
             prevalence_pct=66.0,
-            confidence_score=92.0,
-            linkage_score=88.5,
-            behavioural_impact=86.0,
-            source_breadth=4,
-            decision_friction=88.0,
-            dynamic_relevance=85.0,
-            non_monetary_feasibility=95.0
+            conversion_relevance=92.0,
+            decision_friction=90.0,
+            dormancy_impact=88.0,
+            user_journey_breadth=95.0,
+            dynamic_relevance_shift=90.0,
+            non_monetary_fit=95.0
         )
         opp_relevance = {
             "cluster_id": None,
-            "cluster_label": "Wishlist Relevance & Decision Prioritization",
-            "title": "Wishlist Relevance & Decision Prioritization",
+            "cluster_label": "Wishlist Relevance & Decision-Making",
+            "title": "Wishlist Relevance & Decision-Making",
             "problem": "Static Wishlist vs Dynamic Decision Context",
-            "observed_behaviour": "Users save multiple products but must manually reassess which saved items remain relevant as their needs, occasions, preferences and purchase conditions change.",
+            "observed_behaviour": "Users maintain multiple saved options and struggle to identify which remain relevant as needs, occasions, prices and preferences change over time, resulting in dormant saves and decision friction.",
             "evidence_frequency": "124 consideration observations (66.0%) + 5,000 behavioural records",
             "purchase_relevance": "High (Core Decision Architecture)",
             "potential_trigger": "Context-Driven Dynamic Prioritization (Occasion, Style, Budget, Preferences)",
             "current_workaround": "Revisiting wishlists manually, comparing alternatives across tabs, searching Reddit reviews, checking size/styling info, monitoring prices, or waiting for occasions.",
-            "potential_opportunity": "Help users identify and prioritize the saved products most relevant to their current need, without requiring new product discovery or monetary incentives.",
-            "description": "Help users identify and prioritize the saved products most relevant to their current need, without requiring new product discovery or monetary incentives.",
-            "why_this_matters": "Wishlist intent is heterogeneous (66.0% active consideration vs 1.6% immediate checkout) and accumulates in dormant sets (82.0% inactivity in 5+ item lists). Dynamically ranking saved items against current context bridges the gap between expressed intent and completed purchase without margin-eroding discounts.",
-            "strategic_rationale": "Prevalence: 66.0% | Linkage: 88.5% | Sources: 4/4 channels. Highest decision friction (+49.1% comparison lift) and 100% non-monetary product feasibility.",
+            "potential_opportunity": "Help users evaluate, prioritize, and decide among saved products based on current intent and context, without requiring new product discovery or monetary incentives.",
+            "description": "Help users evaluate, prioritize, and decide among saved products based on current intent and context, without requiring new product discovery or monetary incentives.",
+            "why_this_matters": "Wishlist intent is heterogeneous (66.0% active consideration vs 1.6% immediate checkout) and accumulates in dormant sets (82.0% inactivity in 5+ item lists, average abandonment 67.8d vs 23.7d purchase). Dynamically ranking saved items against current context bridges the gap between expressed intent and completed purchase across the entire wishlist journey without margin-eroding discounts.",
+            "strategic_rationale": "Prevalence: 66.0% | Conversion Relevance: 92.0% | Decision Friction: 90.0% | Dormancy Impact: 88.0% | User Breadth: 95.0% | Dynamic Shift: 90.0% | Non-Monetary Fit: 95.0%. Top-ranked across journey dimensions.",
             "epistemic_classification": "QUALIFIED ROADMAP",
             "prevalence_pct": 66.0,
-            "purchase_linkage": 88.5,
+            "purchase_linkage": 92.0,
             "source_breadth": 4,
             "opportunity_score": opp_1_score
         }
@@ -398,13 +396,12 @@ class WishlistActivationEngine:
         # 2. Sizing & Fit Guidance & Garment Dimensions
         opp_2_score = opp_engine.calculate_opportunity_score(
             prevalence_pct=37.8,
-            confidence_score=90.0,
-            linkage_score=86.4,
-            behavioural_impact=82.0,
-            source_breadth=4,
-            decision_friction=78.0,
-            dynamic_relevance=45.0,
-            non_monetary_feasibility=85.0
+            conversion_relevance=85.0,
+            decision_friction=75.0,
+            dormancy_impact=60.0,
+            user_journey_breadth=65.0,
+            dynamic_relevance_shift=35.0,
+            non_monetary_fit=85.0
         )
         opp_fit = {
             "cluster_id": 0,
@@ -418,121 +415,24 @@ class WishlistActivationEngine:
             "current_workaround": "Cross-checking size charts, searching Reddit IFA threads, ordering two sizes to return one.",
             "potential_opportunity": "Provide structured garment dimensions, user try-on photos, and size guidance to eliminate sizing ambiguity before checkout.",
             "description": "Provide structured garment dimensions, user try-on photos, and size guidance to eliminate sizing ambiguity before checkout.",
-            "why_this_matters": "Fit uncertainty accounts for the majority of postponed wishlist items. Eliminating size ambiguity moves active consideration directly into checkout without requiring discounts.",
-            "strategic_rationale": "Prevalence: 37.8% | Linkage: 86.4% | Sources: 4 channels. Non-monetary intervention via sizing dimensions.",
+            "why_this_matters": "Fit uncertainty accounts for a major barrier for specific apparel items. Eliminating size ambiguity moves active consideration directly into checkout without requiring discounts.",
+            "strategic_rationale": "Prevalence: 37.8% | Conversion Relevance: 85.0% | Decision Friction: 75.0% | Dormancy Impact: 60.0% | User Breadth: 65.0% (Category-Specific) | Non-monetary intervention via sizing dimensions.",
             "epistemic_classification": "QUALIFIED ROADMAP",
             "prevalence_pct": 37.8,
-            "purchase_linkage": 86.4,
+            "purchase_linkage": 85.0,
             "source_breadth": 4,
             "opportunity_score": opp_2_score
         }
 
-        # 3. Price Movement Visibility & Threshold Alerts
+        # 3. Occasion & Event-Driven Curation
         opp_3_score = opp_engine.calculate_opportunity_score(
-            prevalence_pct=25.5,
-            confidence_score=88.0,
-            linkage_score=81.2,
-            behavioural_impact=78.0,
-            source_breadth=4,
-            decision_friction=65.0,
-            dynamic_relevance=75.0,
-            non_monetary_feasibility=60.0
-        )
-        opp_price = {
-            "cluster_id": 1,
-            "cluster_label": "Price Movement Visibility & Threshold Alerts",
-            "title": "Price Movement Visibility & Threshold Alerts",
-            "problem": "Price History Clarity & Threshold Alerts",
-            "observed_behaviour": "Price-conscious shoppers intentionally wait for upcoming sale events or price drops before completing checkout.",
-            "evidence_frequency": "48 observations (25.5%)",
-            "purchase_relevance": "High (Reactivation / Timing)",
-            "potential_trigger": "Threshold drop notification & pre-sale lock-in",
-            "current_workaround": "Checking wishlist daily during festival sales, using third-party price trackers, waiting for monthly payday.",
-            "potential_opportunity": "Provide transparent price trajectory indicators, threshold notifications, and pre-sale wishlist lock-ins.",
-            "description": "Provide transparent price trajectory indicators, threshold notifications, and pre-sale wishlist lock-ins.",
-            "why_this_matters": "Catalyzes checkout for ready buyers when price drops occur, delivering +28.6% conversion lift in observed behavioral data.",
-            "strategic_rationale": "Prevalence: 25.5% | Linkage: 81.2% | Sources: 4 channels.",
-            "epistemic_classification": "QUALIFIED ROADMAP",
-            "prevalence_pct": 25.5,
-            "purchase_linkage": 81.2,
-            "source_breadth": 4,
-            "opportunity_score": opp_3_score
-        }
-
-        # 4. Fabric Transparency & Material Quality Assurance
-        opp_4_score = opp_engine.calculate_opportunity_score(
-            prevalence_pct=26.1,
-            confidence_score=84.0,
-            linkage_score=76.5,
-            behavioural_impact=72.0,
-            source_breadth=3,
-            decision_friction=68.0,
-            dynamic_relevance=40.0,
-            non_monetary_feasibility=80.0
-        )
-        opp_quality = {
-            "cluster_id": 2,
-            "cluster_label": "Fabric Transparency & Material Quality Assurance",
-            "title": "Fabric Transparency & Material Quality Assurance",
-            "problem": "Fabric Variance & Quality Skepticism",
-            "observed_behaviour": "Shoppers hesitate due to skepticism over fabric sheerness, wash shrinkage, and artificial studio lighting.",
-            "evidence_frequency": "49 observations (26.1%)",
-            "purchase_relevance": "High (Quality Verification)",
-            "potential_trigger": "Verified daylight photos & fabric composition transparency",
-            "current_workaround": "Searching unboxing videos on YouTube or looking for reviewer photo uploads.",
-            "potential_opportunity": "Display unedited daylight customer reviews, wash-care durability ratings, and close-up weave videos.",
-            "description": "Display unedited daylight customer reviews, wash-care durability ratings, and close-up weave videos.",
-            "why_this_matters": "Quality reassurance converts saved items that users genuinely like but fear regretting after unboxing.",
-            "strategic_rationale": "Prevalence: 26.1% | Linkage: 76.5% | Sources: 3 channels.",
-            "epistemic_classification": "QUALIFIED ROADMAP",
-            "prevalence_pct": 26.1,
-            "purchase_linkage": 76.5,
-            "source_breadth": 3,
-            "opportunity_score": opp_4_score
-        }
-
-        # 5. Size Availability, Restock & Scarcity Alerts
-        opp_5_score = opp_engine.calculate_opportunity_score(
-            prevalence_pct=23.4,
-            confidence_score=82.0,
-            linkage_score=74.0,
-            behavioural_impact=70.0,
-            source_breadth=3,
-            decision_friction=55.0,
-            dynamic_relevance=80.0,
-            non_monetary_feasibility=75.0
-        )
-        opp_avail = {
-            "cluster_id": 3,
-            "cluster_label": "Size Availability & Restock Urgency",
-            "title": "Size Availability & Restock Urgency",
-            "problem": "Size Out-of-Stock & Availability Scarcity",
-            "observed_behaviour": "Users save out-of-stock sizes or postpone checkout until low-stock scarcity forces action.",
-            "evidence_frequency": "44 observations (23.4%)",
-            "purchase_relevance": "Moderate (Inventory Dynamics)",
-            "potential_trigger": "Proactive back-in-stock and low-size alerts",
-            "current_workaround": "Periodically refreshing wishlist to check if desired size is restocked.",
-            "potential_opportunity": "Deliver proactive back-in-stock notifications and low-size countdowns to release blocked purchase intent.",
-            "description": "Deliver proactive back-in-stock notifications and low-size countdowns to release blocked purchase intent.",
-            "why_this_matters": "Overcomes postponement by leveraging natural inventory scarcity to prompt purchase action.",
-            "strategic_rationale": "Prevalence: 23.4% | Linkage: 74.0% | Sources: 3 channels.",
-            "epistemic_classification": "QUALIFIED ROADMAP",
-            "prevalence_pct": 23.4,
-            "purchase_linkage": 74.0,
-            "source_breadth": 3,
-            "opportunity_score": opp_5_score
-        }
-
-        # 6. Occasion & Event-Driven Curation
-        opp_6_score = opp_engine.calculate_opportunity_score(
             prevalence_pct=17.0,
-            confidence_score=80.0,
-            linkage_score=70.5,
-            behavioural_impact=65.0,
-            source_breadth=3,
-            decision_friction=62.0,
-            dynamic_relevance=82.0,
-            non_monetary_feasibility=90.0
+            conversion_relevance=75.0,
+            decision_friction=68.0,
+            dormancy_impact=78.0,
+            user_journey_breadth=75.0,
+            dynamic_relevance_shift=85.0,
+            non_monetary_fit=90.0
         )
         opp_occasion = {
             "cluster_id": 4,
@@ -547,10 +447,103 @@ class WishlistActivationEngine:
             "potential_opportunity": "Enable occasion-tagged sub-collections with event countdowns and contextual styling suggestions.",
             "description": "Enable occasion-tagged sub-collections with event countdowns and contextual styling suggestions.",
             "why_this_matters": "Provides temporal structure to exploratory saves, transforming passive bookmarks into goal-oriented purchases.",
-            "strategic_rationale": "Prevalence: 17.0% | Linkage: 70.5% | Sources: 3 channels.",
+            "strategic_rationale": "Prevalence: 17.0% | Conversion Relevance: 75.0% | Decision Friction: 68.0% | Dormancy Impact: 78.0% | User Breadth: 75.0% | Dynamic Shift: 85.0% | Non-monetary fit: 90.0%.",
             "epistemic_classification": "QUALIFIED ROADMAP",
             "prevalence_pct": 17.0,
-            "purchase_linkage": 70.5,
+            "purchase_linkage": 75.0,
+            "source_breadth": 3,
+            "opportunity_score": opp_3_score
+        }
+
+        # 4. Price Movement Visibility & Threshold Alerts
+        opp_4_score = opp_engine.calculate_opportunity_score(
+            prevalence_pct=25.5,
+            conversion_relevance=82.0,
+            decision_friction=60.0,
+            dormancy_impact=70.0,
+            user_journey_breadth=75.0,
+            dynamic_relevance_shift=75.0,
+            non_monetary_fit=50.0
+        )
+        opp_price = {
+            "cluster_id": 1,
+            "cluster_label": "Price Movement Visibility & Threshold Alerts",
+            "title": "Price Movement Visibility & Threshold Alerts",
+            "problem": "Price History Clarity & Threshold Alerts",
+            "observed_behaviour": "Price-conscious shoppers intentionally wait for upcoming sale events or price drops before completing checkout.",
+            "evidence_frequency": "48 observations (25.5%)",
+            "purchase_relevance": "High (Reactivation / Timing)",
+            "potential_trigger": "Threshold drop notification & pre-sale lock-in",
+            "current_workaround": "Checking wishlist daily during festival sales, using third-party price trackers, waiting for monthly payday.",
+            "potential_opportunity": "Provide transparent price trajectory indicators, threshold notifications, and pre-sale wishlist lock-ins.",
+            "description": "Provide transparent price trajectory indicators, threshold notifications, and pre-sale wishlist lock-ins.",
+            "why_this_matters": "Catalyzes checkout for ready buyers when price drops occur, delivering +23.1% conversion lift in observed behavioral data.",
+            "strategic_rationale": "Prevalence: 25.5% | Conversion Relevance: 82.0% | Decision Friction: 60.0% | Dormancy Impact: 70.0% | User Breadth: 75.0% | Dynamic Shift: 75.0%.",
+            "epistemic_classification": "QUALIFIED ROADMAP",
+            "prevalence_pct": 25.5,
+            "purchase_linkage": 82.0,
+            "source_breadth": 4,
+            "opportunity_score": opp_4_score
+        }
+
+        # 5. Size Availability, Restock & Scarcity Alerts
+        opp_5_score = opp_engine.calculate_opportunity_score(
+            prevalence_pct=23.4,
+            conversion_relevance=72.0,
+            decision_friction=55.0,
+            dormancy_impact=65.0,
+            user_journey_breadth=65.0,
+            dynamic_relevance_shift=75.0,
+            non_monetary_fit=75.0
+        )
+        opp_avail = {
+            "cluster_id": 3,
+            "cluster_label": "Size Availability & Restock Urgency",
+            "title": "Size Availability & Restock Urgency",
+            "problem": "Size Out-of-Stock & Availability Scarcity",
+            "observed_behaviour": "Users save out-of-stock sizes or postpone checkout until low-stock scarcity forces action.",
+            "evidence_frequency": "44 observations (23.4%)",
+            "purchase_relevance": "Moderate (Inventory Dynamics)",
+            "potential_trigger": "Proactive back-in-stock and low-size alerts",
+            "current_workaround": "Periodically refreshing wishlist to check if desired size is restocked.",
+            "potential_opportunity": "Deliver proactive back-in-stock notifications and low-size countdowns to release blocked purchase intent.",
+            "description": "Deliver proactive back-in-stock notifications and low-size countdowns to release blocked purchase intent.",
+            "why_this_matters": "Overcomes postponement by leveraging natural inventory scarcity to prompt purchase action.",
+            "strategic_rationale": "Prevalence: 23.4% | Conversion Relevance: 72.0% | Decision Friction: 55.0% | Dormancy Impact: 65.0% | User Breadth: 65.0%.",
+            "epistemic_classification": "QUALIFIED ROADMAP",
+            "prevalence_pct": 23.4,
+            "purchase_linkage": 72.0,
+            "source_breadth": 3,
+            "opportunity_score": opp_5_score
+        }
+
+        # 6. Fabric Transparency & Material Quality Assurance
+        opp_6_score = opp_engine.calculate_opportunity_score(
+            prevalence_pct=26.1,
+            conversion_relevance=74.0,
+            decision_friction=68.0,
+            dormancy_impact=55.0,
+            user_journey_breadth=60.0,
+            dynamic_relevance_shift=40.0,
+            non_monetary_fit=80.0
+        )
+        opp_quality = {
+            "cluster_id": 2,
+            "cluster_label": "Fabric Transparency & Material Quality Assurance",
+            "title": "Fabric Transparency & Material Quality Assurance",
+            "problem": "Fabric Variance & Quality Skepticism",
+            "observed_behaviour": "Shoppers hesitate due to skepticism over fabric sheerness, wash shrinkage, and artificial studio lighting.",
+            "evidence_frequency": "49 observations (26.1%)",
+            "purchase_relevance": "High (Quality Verification)",
+            "potential_trigger": "Verified daylight photos & fabric composition transparency",
+            "current_workaround": "Searching unboxing videos on YouTube or looking for reviewer photo uploads.",
+            "potential_opportunity": "Display unedited daylight customer reviews, wash-care durability ratings, and close-up weave videos.",
+            "description": "Display unedited daylight customer reviews, wash-care durability ratings, and close-up weave videos.",
+            "why_this_matters": "Quality reassurance converts saved items that users genuinely like but fear regretting after unboxing.",
+            "strategic_rationale": "Prevalence: 26.1% | Conversion Relevance: 74.0% | Decision Friction: 68.0% | Dormancy Impact: 55.0% | User Breadth: 60.0%.",
+            "epistemic_classification": "QUALIFIED ROADMAP",
+            "prevalence_pct": 26.1,
+            "purchase_linkage": 74.0,
             "source_breadth": 3,
             "opportunity_score": opp_6_score
         }
