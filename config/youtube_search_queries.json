@@ -1,0 +1,256 @@
+{
+  "initial_test_queries": [
+    {
+      "category": "A_wishlist_save_behavior",
+      "query": "Myntra wishlist"
+    },
+    {
+      "category": "B_purchase_hesitation",
+      "query": "why I hesitate buying clothes online"
+    },
+    {
+      "category": "C_price_and_price_drop",
+      "query": "waiting for price drop clothes"
+    },
+    {
+      "category": "D_sales_and_discounts",
+      "query": "Myntra sale shopping"
+    },
+    {
+      "category": "E_festival_sales_india",
+      "query": "Diwali online shopping clothes"
+    },
+    {
+      "category": "G_fit_and_size",
+      "query": "online clothes sizing problem"
+    },
+    {
+      "category": "H_quality_and_material",
+      "query": "online clothes quality problem"
+    },
+    {
+      "category": "J_comparison_and_alternatives",
+      "query": "comparing clothes before buying"
+    },
+    {
+      "category": "I_reviews_and_social_proof",
+      "query": "checking reviews before buying clothes"
+    },
+    {
+      "category": "O_brand_platform_experience",
+      "query": "AJIO shopping experience"
+    }
+  ],
+  "candidate_comment_keywords": [
+    "wishlist",
+    "saved",
+    "save",
+    "buy later",
+    "waiting",
+    "sale",
+    "discount",
+    "price",
+    "price drop",
+    "expensive",
+    "compare",
+    "size",
+    "sizing",
+    "fit",
+    "quality",
+    "review",
+    "return",
+    "exchange",
+    "out of stock",
+    "sold out",
+    "recommend",
+    "worth it",
+    "coupon",
+    "offer",
+    "Diwali",
+    "EORS",
+    "Big Billion Days",
+    "Great Indian Festival"
+  ],
+  "research_categories": {
+    "A_wishlist_save_behavior": [
+      "fashion wishlist",
+      "clothing wishlist",
+      "clothes saved for later",
+      "fashion items saved for later",
+      "clothes I want to buy later",
+      "fashion products I am saving",
+      "online shopping wishlist",
+      "clothing wishlist shopping",
+      "saving clothes to buy later",
+      "bookmarking clothes online",
+      "fashion items I want to buy",
+      "clothes I keep saving",
+      "wishlist shopping experience",
+      "Myntra wishlist",
+      "Myntra saved items",
+      "Myntra wishlist shopping",
+      "AJIO wishlist",
+      "AJIO saved items",
+      "Flipkart fashion wishlist",
+      "Amazon fashion wishlist India",
+      "Indian online fashion wishlist"
+    ],
+    "B_purchase_hesitation": [
+      "why I don't buy clothes online",
+      "why I hesitate buying clothes online",
+      "online fashion purchase hesitation",
+      "why I postpone buying clothes",
+      "why I don't purchase clothes I like",
+      "online clothing purchase decision",
+      "deciding whether to buy clothes online",
+      "fashion shopping hesitation",
+      "clothes shopping decision making"
+    ],
+    "C_price_and_price_drop": [
+      "waiting for price drop clothes",
+      "waiting for price drop fashion",
+      "waiting for clothes to become cheaper",
+      "fashion price drop shopping",
+      "clothes price tracking",
+      "should I wait for price drop clothes",
+      "online fashion price comparison",
+      "fashion shopping price comparison India"
+    ],
+    "D_sales_and_discounts": [
+      "waiting for sale clothes",
+      "waiting for fashion sale",
+      "should I wait for sale clothes",
+      "buying clothes during sale",
+      "online fashion sale shopping",
+      "fashion sale buying behaviour",
+      "clothes sale shopping tips",
+      "fashion discount shopping",
+      "best time to buy clothes online",
+      "Myntra sale shopping",
+      "Myntra sale buying",
+      "Myntra End of Reason Sale",
+      "Myntra EORS shopping",
+      "AJIO sale shopping",
+      "Flipkart fashion sale",
+      "Amazon fashion sale India",
+      "Indian online fashion sale"
+    ],
+    "E_festival_sales_india": [
+      "Diwali online shopping clothes",
+      "Diwali fashion shopping",
+      "Diwali fashion sale",
+      "online shopping during Diwali",
+      "Myntra Diwali sale",
+      "Myntra festive sale",
+      "AJIO Diwali sale",
+      "Flipkart Big Billion Days fashion",
+      "Amazon Great Indian Festival fashion",
+      "Indian festive shopping clothes",
+      "Navratri fashion shopping online",
+      "wedding season fashion shopping India"
+    ],
+    "F_offers_and_coupons": [
+      "fashion coupon shopping",
+      "clothing coupon online",
+      "fashion promo code shopping",
+      "fashion cashback shopping",
+      "online fashion offers",
+      "fashion bank offer shopping",
+      "Myntra coupon shopping",
+      "AJIO coupon shopping",
+      "Myntra bank offer",
+      "fashion sale coupon worth it",
+      "online fashion discount decision"
+    ],
+    "G_fit_and_size": [
+      "online clothes sizing problem",
+      "online clothing fit problem",
+      "clothes don't fit online shopping",
+      "fashion size uncertainty",
+      "Myntra sizing problem",
+      "AJIO sizing problem",
+      "online dress size problem",
+      "choosing clothes size online",
+      "how to know clothes will fit online"
+    ],
+    "H_quality_and_material": [
+      "online clothes quality problem",
+      "online clothing quality before buying",
+      "fashion quality reviews",
+      "clothes material before buying",
+      "Myntra quality problem",
+      "AJIO quality problem",
+      "online fashion quality disappointment",
+      "clothes look different from photos"
+    ],
+    "I_reviews_and_social_proof": [
+      "fashion reviews before buying",
+      "clothing reviews before purchase",
+      "do reviews affect fashion purchase",
+      "fashion product reviews shopping",
+      "online clothing reviews",
+      "checking reviews before buying clothes",
+      "fashion influencer recommendation purchase",
+      "YouTube fashion review before buying"
+    ],
+    "J_comparison_and_alternatives": [
+      "comparing clothes before buying",
+      "compare fashion products online",
+      "clothing comparison before purchase",
+      "choosing between two dresses",
+      "choosing between clothing brands",
+      "fashion product alternatives",
+      "which clothes should I buy",
+      "comparing Myntra and AJIO",
+      "Myntra vs AJIO fashion shopping",
+      "Amazon vs Myntra fashion"
+    ],
+    "K_return_and_exchange": [
+      "online clothes return concerns",
+      "clothes return before buying",
+      "fashion return policy purchase decision",
+      "online clothing exchange problem",
+      "Myntra return problem",
+      "AJIO return problem",
+      "clothes don't fit return online"
+    ],
+    "L_availability_and_stock": [
+      "clothes out of stock shopping",
+      "fashion size out of stock",
+      "wishlist item out of stock",
+      "waiting for size to come back",
+      "fashion product stock availability",
+      "Myntra size unavailable",
+      "AJIO size unavailable",
+      "clothes wishlist unavailable"
+    ],
+    "M_styling_and_occasion": [
+      "should I buy this dress",
+      "does this outfit suit me",
+      "fashion purchase advice",
+      "clothes for occasion online shopping",
+      "wedding outfit shopping online",
+      "office clothes online shopping",
+      "party outfit buying decision",
+      "styling before buying clothes"
+    ],
+    "N_external_information_seeking": [
+      "what to check before buying clothes online",
+      "fashion shopping advice",
+      "online clothing buying tips",
+      "how to decide what clothes to buy",
+      "fashion product research before buying",
+      "clothes buying advice YouTube",
+      "fashion shopping mistakes"
+    ],
+    "O_brand_platform_experience": [
+      "Myntra shopping experience",
+      "Myntra buying experience",
+      "Myntra fashion shopping review",
+      "AJIO shopping experience",
+      "AJIO buying experience",
+      "Flipkart fashion shopping review",
+      "Amazon fashion shopping India"
+    ]
+  }
+}

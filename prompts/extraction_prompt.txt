@@ -1,0 +1,52 @@
+You are an expert Voice-of-Customer (VoC) and Behavioral Analytics AI evaluating consumer feedback in ONLINE FASHION SHOPPING.
+
+OBJECTIVE:
+Extract structured decision signals, purchase barriers, uncertainties, decision stages, exact quote evidence, and underlying Jobs-to-be-Done (inferred needs) from the text.
+
+INPUT TEXT:
+"""
+{text}
+"""
+SOURCE CONTEXT: {source} ({source_type})
+
+SCHEMA REQUIREMENTS:
+Extract and output strictly a valid JSON object matching this exact schema:
+{{
+  "user_intent": "high_intent_buy" | "low_intent_browse" | "bookmark_only" | "price_drop_monitoring" | "sale_waiting" | "gift_idea",
+  "wishlist_reason": "waiting_for_sale" | "price_too_high" | "sizing_uncertainty" | "fabric_uncertainty" | "comparing_alternatives" | "temporary_shortlist" | "cooling_off" | "none",
+  "purchase_intent": "immediate" | "postponed" | "abandoned" | "conditional_on_discount" | "conditional_on_fit",
+  "purchase_barrier": "price" | "fit_sizing" | "quality_material" | "information_gap" | "trust" | "reviews" | "returns" | "availability" | "styling_occasion" | "none",
+  "purchase_hesitation": "<Brief description of what caused hesitation, or null>",
+  "purchase_postponement_reason": "<Specific reason user waited/postponed, or null>",
+  "uncertainty_type": "fit_size" | "fabric_quality" | "authenticity" | "price_fairness" | "occasion_suitability" | "return_hassle" | "none",
+  "information_needed": "<What specific information/photos/proof would resolve their uncertainty, or null>",
+  "decision_stage": "discovery" | "wishlisted" | "active_consideration" | "external_research" | "abandoned" | "purchased",
+  "behaviour_after_interest": "monitored_price" | "searched_reviews" | "asked_community" | "forgot_item" | "compared_other_platforms" | "waited_for_sale" | "none",
+  "comparison_behaviour": "compared_brands" | "compared_platforms" | "compared_prices" | "compared_similar_items" | "none",
+  "external_search_behaviour": "searched_reddit" | "watched_youtube_haul" | "checked_google_images" | "read_blogs" | "none",
+  "competitor_behaviour": "checked_myntra" | "checked_ajio" | "checked_amazon" | "checked_flipkart" | "none",
+  "purchase_outcome": "purchased" | "postponed" | "abandoned" | "switched_competitor" | "unknown",
+  "product_category": "Apparel" | "Footwear" | "Ethnic Wear" | "Western Wear" | "Accessories" | "General Fashion",
+  "product_type": "<e.g., dress, jeans, kurta, shoes, or null>",
+  "price_sensitivity": "high" | "moderate" | "low",
+  "fit_concern": <0 or 1>,
+  "size_concern": <0 or 1>,
+  "quality_concern": <0 or 1>,
+  "material_concern": <0 or 1>,
+  "styling_concern": <0 or 1>,
+  "occasion_concern": <0 or 1>,
+  "review_concern": <0 or 1>,
+  "social_validation_need": <0 or 1>,
+  "trust_concern": <0 or 1>,
+  "availability_concern": <0 or 1>,
+  "return_exchange_concern": <0 or 1>,
+  "user_segment_signals": "deal_seeker" | "brand_conscious" | "hesitant_first_timer" | "frequent_buyer" | "wedding_shopper" | "festival_shopper" | "general",
+  "evidence_strength": "strong" | "moderate" | "weak",
+  "evidence_span": "<EXACT VERBATIM substring quote from the text that proves the barrier or intent>",
+  "evidence_type": "explicit" | "inferred",
+  "inferred_user_need": "<1 sentence underlying Job-to-be-Done, e.g., Needs reliable real-customer photos to verify fabric opacity before checkout>",
+  "inference_confidence": <float between 0.0 and 1.0>
+}}
+
+CRITICAL RULE FOR EVIDENCE_SPAN:
+`evidence_span` MUST BE AN EXACT VERBATIM SUBSTRING of the input text. Do NOT summarize or rephrase `evidence_span`.

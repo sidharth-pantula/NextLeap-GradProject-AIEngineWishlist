@@ -1,0 +1,1077 @@
+MASTER BUILD PROMPT — AI-POWERED WISHLIST-TO-PURCHASE DISCOVERY ENGINE
+0. ROLE AND OBJECTIVE
+You are an expert AI product engineer, data engineer, ML engineer, and product analytics engineer helping me build an AI-Powered Voice-of-Customer Discovery Engine for a fashion e-commerce product.
+I am acting as a Product Manager on the Growth Team.
+The project will be built in Google Antigravity using Python.
+I want a technically credible, modular, working prototype—not a conceptual mockup.
+Do not immediately propose product solutions. The purpose of this project is to discover the underlying user problem first.
+________________________________________
+1. BUSINESS PROBLEM
+Millions of users browse fashion products, save products they like, and add products to wishlists.
+A wishlist represents a particularly interesting behavioural signal:
+The user has explicitly expressed interest in a product but has stopped short of purchasing it.
+Users can accumulate dozens or hundreds of wishlisted products, while only a small proportion eventually translate into purchases.
+The company's strategic goal is:
+Increase the percentage of users who purchase at least one item from their wishlist within 30 days of adding it.
+Improving wishlist-to-purchase conversion could:
+•	Increase purchase frequency
+•	Improve monetization from existing users
+•	Extract more value from already-existing high-intent demand
+•	Reduce loss of expressed purchase intent
+However, the underlying user problem is unknown.
+The task is therefore:
+Discover what prevents users from converting wishlist interest into a purchase.
+The eventual product solution cannot rely on monetary incentives.
+________________________________________
+2. PURPOSE OF THIS SYSTEM
+Build an AI-powered Voice-of-Customer Discovery Engine that analyzes large-scale publicly available conversations about online fashion shopping.
+The engine must transform:
+Unstructured user conversations
+into:
+Structured behavioural signals → recurring problems → user needs → purchase barriers → quantified evidence → segment differences → opportunity areas → testable hypotheses
+The engine is a discovery and research system.
+It is NOT a product recommendation engine.
+It must NOT prematurely decide that the solution is:
+•	Discounts
+•	Coupons
+•	Price incentives
+•	Loyalty rewards
+•	Or any specific product feature.
+The system should first determine what the underlying problem actually is.
+________________________________________
+3. CORE RESEARCH QUESTIONS
+The system must help a Product Manager answer:
+Wishlist behaviour
+1.	Why do users add fashion products to their wishlist?
+2.	What does a wishlist addition actually represent?
+3.	When is wishlist behaviour genuine purchase intent?
+4.	When is it merely bookmarking?
+5.	When is it shortlisting/comparison?
+6.	When is it price-waiting?
+7.	When is it future/occasion-based intent?
+Purchase conversion
+8.	What prevents wishlisted products from eventually being purchased?
+9.	What causes users to postpone purchases?
+10.	What causes users to abandon products?
+11.	What happens between wishlist creation and purchase/non-purchase?
+12.	What uncertainties remain after users identify a product they like?
+Decision-making
+13.	How do users compare multiple shortlisted products?
+14.	What makes users unable to decide between products?
+15.	What information do users need before committing?
+16.	What triggers confidence to purchase?
+External information
+17.	What information do users seek outside the fashion platform?
+18.	Do they use Google, Reddit, YouTube, influencers, brand websites, competitors or communities?
+19.	What information gaps cause users to leave the platform?
+Specific potential problem areas
+20.	What role do fit, size, quality, styling, price, reviews, occasion, trust, availability and social validation play?
+21.	Which of these are actual purchase barriers versus merely common complaints?
+22.	What new problems emerge that were not anticipated in the initial taxonomy?
+Segmentation
+23.	How do these behaviours differ by product category?
+24.	How do they differ by user behaviour?
+25.	How do high-intent users differ from low-intent users?
+26.	How do frequent wishlist users differ from occasional wishlist users?
+27.	How do price-sensitive users differ from premium shoppers?
+Opportunity
+28.	What unmet needs emerge consistently?
+29.	Which problems have the strongest evidence?
+30.	Which problems have the strongest connection to purchase hesitation?
+31.	Which opportunity areas should the Product Manager investigate first?
+________________________________________
+4. IMPORTANT PRODUCT-ANALYTICS PRINCIPLE
+The system must distinguish between:
+Observation
+What users explicitly say or what is directly observed in the collected conversations.
+Example:
+"I am waiting for the sale."
+Hypothesis
+A potential explanation derived from observations.
+Example:
+Some wishlist additions may represent price-waiting intent rather than immediate purchase intent.
+Causal claim
+A claim about actual impact on the business metric.
+Example:
+Price waiting causes 30% of wishlist non-conversion.
+The public-feedback engine may establish observations and generate hypotheses.
+It must NOT claim causality without appropriate first-party behavioural data or experimentation.
+________________________________________
+5. TECHNOLOGY STACK
+Use the following architecture unless there is a compelling technical reason to change it.
+Development
+Google Antigravity
+Programming language
+Python
+LLM
+Groq API
+Use Groq for:
+•	Relevance classification
+•	Structured extraction
+•	User-need interpretation
+•	Cluster labeling
+•	Research synthesis
+•	RAG answer generation
+Embeddings
+Use a local BGE embedding model.
+Do not use an external embedding API unless necessary.
+The same embedding model must be used consistently for:
+•	Feedback
+•	Evidence
+•	Queries
+•	Problem descriptions
+•	Cluster representations
+Vector database
+ChromaDB
+Use ChromaDB for:
+•	Feedback embeddings
+•	Evidence embeddings
+•	Semantic retrieval
+•	RAG
+Structured database
+Use an in-house/local database.
+Prefer:
+SQLite for the initial prototype
+unless the implementation genuinely requires PostgreSQL.
+The system should not require a hosted database for the initial version.
+Analytics
+Use:
+•	Python
+•	pandas
+•	NumPy
+•	SQL
+•	scikit-learn where appropriate
+Clustering
+Use BGE embeddings + suitable clustering techniques.
+Evaluate suitable methods such as:
+•	HDBSCAN
+•	K-Means where appropriate
+•	Hierarchical clustering
+Do not blindly force a predetermined number of clusters.
+Dashboard / interface
+Use Streamlit for the prototype.
+________________________________________
+6. HIGH-LEVEL ARCHITECTURE
+Build the system as:
+PUBLIC DATA SOURCES
+        ↓
+SOURCE-SPECIFIC COLLECTORS / LOADERS
+        ↓
+RAW DATA STORE
+        ↓
+CLEANING + NORMALIZATION
+        ↓
+DEDUPLICATION
+        ↓
+RELEVANCE FILTERING
+        ↓
+LLM STRUCTURED EXTRACTION
+        ↓
+BGE EMBEDDINGS
+        ↓
+SEMANTIC CLUSTERING
+        ↓
+PROBLEM DISCOVERY
+        ↓
+PROBLEM TAXONOMY
+        ↓
+QUANTIFICATION
+        ↓
+SEGMENTATION
+        ↓
+OPPORTUNITY SCORING
+        ↓
+SQL/STRUCTURED DATABASE + CHROMADB
+        ↓
+RAG
+        ↓
+GROQ RESEARCH ENGINE
+        ↓
+STREAMLIT DASHBOARD + RESEARCH CHAT
+Keep every layer modular.
+A data source should be replaceable without modifying the downstream analysis pipeline.
+________________________________________
+7. DATA SOURCES
+The system should support multiple independent sources.
+A. Reddit
+Use an appropriate official/approved Reddit API/developer access mechanism where available.
+If appropriate API access is unavailable for the prototype, support ingestion of a legitimate public Reddit dataset.
+Do not make the system dependent on scraping Reddit HTML.
+Potential topics:
+•	Fashion shopping
+•	Online fashion
+•	Myntra
+•	AJIO
+•	Clothing shopping
+•	Fashion sizing
+•	Clothing fit
+•	Clothing quality
+•	Fashion returns
+•	Wishlist behaviour
+•	Purchase hesitation
+•	Waiting for sales
+•	Product comparisons
+________________________________________
+B. YouTube
+Use the YouTube Data API.
+The collector should:
+1.	Accept search queries.
+2.	Search relevant videos.
+3.	Retrieve video metadata.
+4.	Retrieve available comment threads/comments.
+5.	Handle pagination.
+6.	Handle API errors.
+7.	Respect API limits.
+8.	Deduplicate comments.
+9.	Store normalized records.
+Potential search queries:
+•	Myntra shopping experience
+•	Myntra review
+•	Myntra sizing
+•	Myntra quality
+•	Myntra haul
+•	Myntra wishlist
+•	AJIO shopping experience
+•	AJIO review
+•	AJIO sizing
+•	AJIO quality
+•	Online fashion shopping India
+•	Online clothes shopping India
+•	Online clothing fit
+•	Online fashion reviews
+•	Fashion shopping mistakes
+•	How to choose clothes online
+Do not limit searches to brand names.
+The goal is to discover shopping behaviour and decision-making, not just brand sentiment.
+________________________________________
+C. Google Play / App Reviews
+Where official first-party review APIs are available and appropriate, use them.
+For third-party apps where direct API access is unavailable, support ingestion of legitimate public datasets or permitted review sources.
+Do not assume that a developer API provides unrestricted access to arbitrary third-party app reviews.
+________________________________________
+D. Apple App Store
+Support ingestion through appropriate permitted/public review sources or datasets.
+________________________________________
+E. Public Web / Fashion Communities
+Use compliant search and page-retrieval methods to discover relevant public conversations.
+Search for behavioural topics such as:
+•	Why don't people buy clothes online?
+•	Online clothes sizing problems
+•	Online fashion fit problems
+•	Myntra wishlist
+•	Waiting for Myntra sale
+•	Myntra quality discussions
+•	AJIO shopping experience
+•	Online fashion purchase hesitation
+•	Fashion product comparisons
+•	Choosing clothes online
+•	Fashion shopping problems
+Search engines should primarily be used as a discovery mechanism for relevant public pages, not as the primary user-feedback store.
+Respect applicable:
+•	Terms of service
+•	API restrictions
+•	robots/access rules
+•	rate limits
+•	privacy requirements
+________________________________________
+8. DATA COLLECTION PRINCIPLE
+Do NOT manually copy and paste thousands of reviews/comments.
+Build source-specific collectors/loaders such as:
+collectors/
+    youtube_collector.py
+    reddit_collector.py
+    app_review_loader.py
+    web_collector.py
+All collectors must output the same normalized schema.
+Example:
+feedback_id
+source
+source_type
+source_id
+date
+text
+title
+url
+product
+category
+rating
+engagement
+metadata
+collection_timestamp
+The downstream AI pipeline must be source-agnostic.
+________________________________________
+9. CREDENTIAL MANAGEMENT
+Never hardcode API keys.
+Use .env.
+Expected configuration:
+GROQ_API_KEY=...
+
+YOUTUBE_API_KEY=...
+
+# Optional if appropriate Reddit API access is available
+REDDIT_CLIENT_ID=...
+REDDIT_CLIENT_SECRET=...
+REDDIT_USER_AGENT=...
+If a web-search provider is used:
+SEARCH_API_KEY=...
+Do not commit .env to version control.
+Create .gitignore accordingly.
+________________________________________
+10. RAW DATA LAYER
+Create a raw feedback store.
+Suggested table:
+raw_feedback
+Fields:
+feedback_id
+source
+source_type
+source_id
+date
+text
+title
+url
+product
+category
+rating
+engagement
+metadata
+collection_timestamp
+Preserve original text exactly wherever possible.
+Never overwrite raw evidence during processing.
+________________________________________
+11. CLEANING
+Build a cleaning pipeline that:
+•	Removes exact duplicates
+•	Detects near-duplicates
+•	Removes spam
+•	Removes obvious promotional/affiliate content
+•	Removes malformed records
+•	Normalizes encoding
+•	Handles missing values
+•	Preserves original evidence
+•	Preserves source metadata
+Maintain:
+Raw dataset
+and
+Processed dataset
+as separate layers.
+________________________________________
+12. RELEVANCE CLASSIFICATION
+Use Groq LLM to classify each observation.
+Use:
+0 — Irrelevant
+No useful information.
+1 — Peripheral
+Fashion/shopping discussion without meaningful decision information.
+2 — Relevant
+Useful information about online fashion shopping, decision-making or uncertainty.
+3 — Highly relevant
+Explicit discussion of:
+•	Wishlist/save behaviour
+•	Purchase hesitation
+•	Purchase postponement
+•	Purchase abandonment
+•	Product comparison
+•	Information seeking
+•	Purchase decision
+•	Reasons for not purchasing
+Store:
+relevance_score
+relevance_reason
+relevance_confidence
+________________________________________
+13. LLM STRUCTURED EXTRACTION
+For relevant observations, use Groq to extract structured information.
+Suggested schema:
+user_intent
+wishlist_reason
+purchase_intent
+purchase_barrier
+purchase_hesitation
+purchase_postponement_reason
+uncertainty_type
+information_needed
+decision_stage
+behaviour_after_interest
+comparison_behaviour
+external_search_behaviour
+competitor_behaviour
+purchase_outcome
+product_category
+product_type
+price_sensitivity
+fit_concern
+size_concern
+quality_concern
+material_concern
+styling_concern
+occasion_concern
+review_concern
+social_validation_need
+trust_concern
+availability_concern
+return_exchange_concern
+user_segment_signals
+evidence_strength
+All fields must be nullable.
+The model must not invent information that isn't present.
+________________________________________
+14. EVIDENCE EXTRACTION
+For every important classification, preserve the relevant evidence span.
+Store:
+original_text
+evidence_span
+extracted_claim
+evidence_type
+confidence
+Evidence types:
+•	Explicit
+•	Inferred
+Example:
+Explicit:
+"I didn't buy it because I wasn't sure about the size."
+Inferred:
+The user may have fit uncertainty.
+Do not present inferred information as if the user explicitly stated it.
+________________________________________
+15. UNDERLYING USER NEED
+For each relevant problem, attempt to identify the underlying user need/job.
+Example:
+Surface statement:
+"I don't know which size to order."
+Underlying need:
+Confidence that the product will fit before purchase.
+Another:
+"I'll buy this during the sale."
+Underlying need:
+Confidence that the current purchase price is acceptable.
+Store:
+observed_statement
+inferred_user_need
+inference_confidence
+________________________________________
+16. WISHLIST INTENT TAXONOMY
+Identify why users wishlist products.
+Initial categories:
+immediate_purchase_intent
+future_purchase_intent
+price_waiting
+comparison_shortlisting
+bookmarking
+aspirational_interest
+occasion_planning
+availability_monitoring
+social_style_inspiration
+unknown
+The system must be capable of discovering additional categories.
+Do not assume that every wishlist addition is high purchase intent.
+________________________________________
+17. PURCHASE BARRIER DISCOVERY
+Identify recurring purchase barriers.
+Initial taxonomy:
+Product uncertainty
+•	Fit
+•	Size
+•	Material
+•	Quality
+•	Colour
+•	Appearance
+•	Authenticity
+Price/timing
+•	Waiting for sale
+•	Price reduction
+•	Price comparison
+•	Value uncertainty
+•	Payday timing
+•	Occasion timing
+Availability
+•	Size unavailable
+•	Product unavailable
+•	Variant unavailable
+•	Pincode limitations
+•	Stock fluctuation
+Decision complexity
+•	Too many alternatives
+•	Difficulty comparing
+•	Difficulty choosing
+•	Similar products
+•	Lack of recommendation
+Trust
+•	Seller trust
+•	Authenticity
+•	Review credibility
+•	Quality confidence
+•	Return/exchange confidence
+Styling/social validation
+•	Suitability
+•	Appearance
+•	Personal style
+•	Matching existing clothes
+•	Opinions
+•	Social validation
+•	Occasion suitability
+Shopping friction
+•	Search
+•	Discovery
+•	Comparison
+•	Checkout
+•	Returns/exchanges
+These are initial categories, NOT predetermined conclusions.
+The clustering/discovery system must identify additional categories.
+________________________________________
+18. EMBEDDINGS
+Use a local BGE embedding model.
+Generate embeddings for:
+•	Relevant feedback
+•	Evidence snippets
+•	Inferred user needs
+•	Problem descriptions
+•	Cluster summaries
+Use the same embedding model consistently.
+Do not use embeddings for numerical calculations.
+________________________________________
+19. SEMANTIC CLUSTERING
+Use BGE embeddings with suitable clustering methods.
+Potential approaches:
+•	HDBSCAN
+•	K-Means
+•	Hierarchical clustering
+Prefer methods that allow discovery of naturally occurring clusters and outliers.
+Do not force every observation into a predefined problem category.
+For every cluster store:
+cluster_id
+cluster_size
+cluster_label
+cluster_description
+representative_evidence
+sub_themes
+outliers
+confidence
+The system should identify emerging problem areas that are absent from the initial taxonomy.
+________________________________________
+20. PROBLEM TAXONOMY
+Maintain a two-level taxonomy.
+Level 1
+Examples:
+•	Product uncertainty
+•	Price/timing
+•	Availability
+•	Decision complexity
+•	Trust
+•	Styling/social validation
+•	Shopping friction
+•	Wishlist intent/bookmarking
+Level 2
+Examples:
+Product uncertainty:
+•	Fit
+•	Size
+•	Material
+•	Quality
+•	Colour
+•	Appearance
+Price/timing:
+•	Waiting for sale
+•	Price comparison
+•	Value uncertainty
+•	Timing
+Decision complexity:
+•	Too many alternatives
+•	Comparison difficulty
+•	Selection difficulty
+The taxonomy must be editable and capable of absorbing newly discovered clusters.
+________________________________________
+21. QUANTIFICATION ENGINE
+Use Python/SQL—not the LLM—for numerical calculations.
+Calculate for each problem:
+Frequency
+Number of relevant observations.
+Prevalence
+Percentage of relevant observations.
+Source breadth
+Number of independent source types.
+Explicit evidence rate
+Percentage directly stated.
+Inferred evidence rate
+Percentage inferred.
+User intensity
+Strength of purchase-decision impact.
+Purchase linkage
+Association with:
+•	Hesitation
+•	Postponement
+•	Abandonment
+•	Comparison
+•	External research
+•	Non-purchase
+Segment concentration
+Which segments experience it most.
+Recency
+Trend over time.
+The system must never allow the LLM to fabricate numbers.
+________________________________________
+22. SEGMENTATION
+Support analysis by:
+User behaviour
+•	High wishlist users
+•	Low wishlist users
+•	Frequent purchasers
+•	Infrequent purchasers
+•	Wishlist-heavy users
+•	High-intent users
+•	Low-intent users
+Product category
+•	Apparel
+•	Footwear
+•	Accessories
+•	Other fashion categories
+Price
+•	Low
+•	Mid
+•	Premium
+Decision stage
+•	Discovery
+•	Initial interest
+•	Wishlist
+•	Revisit
+•	Comparison
+•	Research
+•	Hesitation
+•	Postponement
+•	Abandonment
+•	Purchase
+The system should be able to compare problem distributions across segments.
+________________________________________
+23. EXTERNAL INFORMATION-SEEKING
+Explicitly analyze what users seek outside the platform.
+Possible destinations:
+•	Google
+•	Reddit
+•	YouTube
+•	Social media
+•	Influencers
+•	Brand websites
+•	Competitors
+•	Friends/community
+Identify:
+1.	What information they seek.
+2.	Why they seek it.
+3.	Whether the information is unavailable/insufficient on the platform.
+4.	Whether external research appears associated with hesitation or purchase.
+________________________________________
+24. DECISION-JOURNEY ANALYSIS
+Where evidence permits, reconstruct behavioural paths.
+Potential path:
+Discover
+↓
+Like
+↓
+Wishlist
+↓
+Revisit
+↓
+Compare
+↓
+Research
+↓
+Hesitate
+↓
+Purchase / Postpone / Abandon
+Do not assume this is the only path.
+Identify alternative paths.
+Identify where major uncertainties appear.
+________________________________________
+25. DATABASE
+Use SQLite for the prototype.
+Suggested tables:
+raw_feedback
+Original collected content.
+processed_feedback
+LLM structured extraction.
+problem_clusters
+Semantic clusters.
+evidence
+Evidence linked to problems.
+segments
+Segment information.
+metrics
+Calculated metrics.
+opportunities
+Opportunity scores.
+research_queries
+Optional logging of PM research questions and generated responses.
+________________________________________
+26. CHROMADB
+Use ChromaDB as the vector database.
+Collections may include:
+•	feedback
+•	evidence
+•	problems
+•	user_needs
+Store:
+•	embedding
+•	document
+•	metadata
+•	source
+•	problem cluster
+•	category
+•	segment
+•	date
+Use metadata filtering where appropriate before semantic retrieval.
+________________________________________
+27. RAG
+Build a RAG system using:
+ChromaDB retrieval + structured database queries + Groq LLM
+Do not rely only on vector search.
+When a question requires numerical information:
+1.	Query SQLite/analytics tables.
+2.	Retrieve relevant evidence from ChromaDB.
+3.	Give both to Groq.
+4.	Generate the final answer.
+This is important because:
+Vector search retrieves evidence.
+SQL/Python provides accurate quantitative metrics.
+Groq synthesizes the answer.
+________________________________________
+28. RESEARCH INTERFACE
+Build a Streamlit research interface.
+The PM should be able to ask questions such as:
+Why do users wishlist fashion products?
+What prevents users from buying?
+What causes postponement?
+What are the biggest uncertainties?
+How do users compare products?
+What information do they seek outside the platform?
+What are the biggest problems for footwear?
+What are high-intent users struggling with?
+Is price more important than fit?
+What unmet needs emerge consistently?
+What are the top opportunity areas?
+________________________________________
+29. RESEARCH RESPONSE FORMAT
+Every substantive answer should return:
+Finding
+Clear insight.
+Quantification
+Relevant calculated metrics.
+Affected segments
+Who experiences it.
+Observed behaviour
+What users actually do.
+Evidence
+Representative conversations.
+Sources
+Source links/identifiers.
+Confidence
+High / Medium / Low.
+Interpretation
+What this potentially means for wishlist-to-purchase behaviour.
+Remaining uncertainty
+What cannot be concluded from the available data.
+________________________________________
+30. OPPORTUNITY SCORING
+Create an opportunity framework using dimensions such as:
+•	Prevalence
+•	User intensity
+•	Purchase-decision linkage
+•	Source breadth
+•	Segment relevance
+•	Evidence confidence
+•	Recency
+•	Actionability
+Generate an opportunity score/ranking.
+Clearly label it as:
+Discovery / prioritization score
+not:
+Expected causal impact on conversion.
+________________________________________
+31. CONTRADICTORY EVIDENCE
+The system must actively detect contradictory findings.
+Example:
+Some users may say:
+"I wait for sales."
+Others may say:
+"I buy immediately when I find what I want."
+Do not force both into one conclusion.
+The engine should report heterogeneous behaviour.
+________________________________________
+32. SOURCE BIAS
+Recognize that sources represent different populations.
+For example:
+•	Reddit may overrepresent highly engaged users.
+•	App reviews may overrepresent extreme experiences.
+•	YouTube comments may reflect creator-specific audiences.
+•	Product reviews represent purchasers and therefore do not directly represent non-buyers.
+Therefore:
+Do not interpret raw source frequency as population-level prevalence.
+Use:
+•	Cross-source consistency
+•	Evidence breadth
+•	Explicit purchase linkage
+•	Segment patterns
+to strengthen confidence.
+________________________________________
+33. DASHBOARD
+Create four primary Streamlit views.
+A. Executive Discovery
+Display:
+•	Total observations
+•	Relevant observations
+•	Source distribution
+•	Category distribution
+•	Top problems
+•	Emerging problems
+•	Top opportunities
+________________________________________
+B. Problem Explorer
+For each problem:
+•	Description
+•	Frequency
+•	Prevalence
+•	Source breadth
+•	Category distribution
+•	Segment distribution
+•	Purchase linkage
+•	Trend
+•	Evidence
+•	Confidence
+•	Contradictory evidence
+________________________________________
+C. Decision Journey
+Visualize observed paths:
+Discover → Like → Wishlist → Revisit → Compare → Research → Hesitate → Purchase/Postpone/Abandon
+Show where problems occur.
+________________________________________
+D. Research Assistant
+Natural-language research interface.
+Return:
+Finding + Quantification + Evidence + Segments + Confidence + Interpretation + Unknowns
+________________________________________
+34. RELIABILITY
+Implement:
+•	Evidence traceability
+•	Source citations
+•	Original-text preservation
+•	Explicit/inferred distinction
+•	Confidence
+•	Deterministic numerical calculations
+•	Deduplication
+•	Contradictory evidence detection
+•	Source-level comparison
+If evidence is insufficient:
+Insufficient evidence to conclude.
+Do not hallucinate.
+Do not fabricate quotes.
+Do not invent statistics.
+________________________________________
+35. PROJECT STRUCTURE
+Use a modular project structure similar to:
+wishlist-discovery-engine/
+│
+├── collectors/
+│   ├── youtube_collector.py
+│   ├── reddit_collector.py
+│   ├── app_review_loader.py
+│   └── web_collector.py
+│
+├── data/
+│   ├── raw/
+│   └── processed/
+│
+├── database/
+│   ├── schema.py
+│   └── db.py
+│
+├── processing/
+│   ├── cleaning.py
+│   ├── deduplication.py
+│   └── relevance.py
+│
+├── ai/
+│   ├── groq_client.py
+│   ├── extraction.py
+│   ├── embeddings.py
+│   └── clustering.py
+│
+├── analysis/
+│   ├── metrics.py
+│   ├── segmentation.py
+│   └── opportunity.py
+│
+├── vector/
+│   └── chroma_store.py
+│
+├── rag/
+│   ├── retrieval.py
+│   └── research_engine.py
+│
+├── dashboard/
+│   └── app.py
+│
+├── prompts/
+│   ├── relevance_prompt.txt
+│   ├── extraction_prompt.txt
+│   └── research_prompt.txt
+│
+├── .env
+├── .gitignore
+├── requirements.txt
+└── main.py
+Adjust this structure if necessary, but preserve modular separation of responsibilities.
+________________________________________
+36. API / CREDENTIAL REQUIREMENTS
+The initial stack should require only:
+Required
+Groq API key
+For LLM tasks.
+YouTube Data API key
+For YouTube collection.
+Optional
+Reddit credentials
+Only if appropriate official/approved access is available.
+Otherwise use a legitimate public dataset.
+Search API
+Only if a separate web-search provider is required.
+No requirement for:
+•	OpenAI API
+•	MCP
+•	n8n
+•	Autonomous AI agents
+•	Hosted vector DB
+•	Hosted database
+•	Separate embedding API
+Use the local BGE model for embeddings and ChromaDB locally.
+________________________________________
+37. INITIAL DATA TARGET
+Do not initially attempt to collect millions of records.
+For the prototype, aim approximately for:
+•	5,000–10,000 YouTube comments
+•	5,000–10,000 Reddit observations
+•	5,000–10,000 app reviews
+•	1,000–5,000 public web/community observations
+These are prototype targets, not strict requirements.
+Prioritize:
+Relevance + source diversity + evidence quality
+over raw volume.
+The architecture should remain scalable.
+________________________________________
+38. IMPLEMENTATION STRATEGY
+Do NOT ask Antigravity to build everything in one step.
+Implement in phases.
+Phase 1 — Infrastructure
+Build:
+•	Python project
+•	.env
+•	.gitignore
+•	SQLite
+•	ChromaDB
+•	configuration
+•	logging
+•	common data schema
+________________________________________
+Phase 2 — YouTube ingestion
+Implement first.
+Acceptance criteria:
+•	API key loaded securely
+•	Search queries supported
+•	Video search works
+•	Comments retrieved
+•	Pagination works
+•	Errors handled
+•	Duplicate comments removed
+•	Data normalized
+•	Data saved to SQLite/raw files
+•	Collection metrics logged
+Do not build RAG or the dashboard yet.
+________________________________________
+Phase 3 — Reddit and app-review ingestion
+Add:
+•	Reddit API/dataset loader
+•	App-review loader
+•	Common schema
+•	Cross-source normalization
+________________________________________
+Phase 4 — Cleaning and relevance
+Implement:
+•	Cleaning
+•	Deduplication
+•	Relevance classification
+•	Evidence preservation
+________________________________________
+Phase 5 — LLM extraction
+Implement Groq-based structured extraction.
+Validate the output on a manually reviewed sample.
+________________________________________
+Phase 6 — BGE embeddings
+Implement local BGE embedding generation.
+Store embeddings in ChromaDB.
+________________________________________
+Phase 7 — Clustering and problem discovery
+Implement:
+•	Semantic clustering
+•	Cluster labeling
+•	Emerging-theme detection
+•	Problem taxonomy
+________________________________________
+Phase 8 — Quantification
+Implement deterministic metrics:
+•	Frequency
+•	Prevalence
+•	Source breadth
+•	Explicit/inferred ratio
+•	Purchase linkage
+•	Segment distribution
+•	Trends
+________________________________________
+Phase 9 — Opportunity scoring
+Implement opportunity comparison and ranking.
+________________________________________
+Phase 10 — RAG
+Implement:
+•	Query understanding
+•	SQLite metric retrieval
+•	ChromaDB evidence retrieval
+•	Groq synthesis
+•	Evidence citations
+________________________________________
+Phase 11 — Streamlit
+Build:
+•	Executive dashboard
+•	Problem explorer
+•	Decision journey
+•	Research assistant
+________________________________________
+39. FIRST MILESTONE
+Do not start by building the entire AI engine.
+The first milestone is:
+Build a reliable YouTube ingestion pipeline that retrieves real fashion-shopping conversations and stores them in the normalized raw-feedback schema.
+Only after this works should the AI processing layer be implemented.
+________________________________________
+40. FINAL SUCCESS CRITERIA
+The project is successful when a Product Manager can enter:
+"Why are users not purchasing the fashion products they wishlist?"
+and the system can return something like:
+Finding
+A set of recurring purchase barriers discovered from the evidence.
+Quantification
+How frequently each appears in the dataset.
+Segment differences
+Who experiences each problem.
+Purchase linkage
+How frequently users explicitly connect the issue with hesitation, postponement or abandonment.
+Evidence
+Representative real user conversations.
+Source breadth
+Where the problem appears.
+Confidence
+How strong the evidence is.
+Contradictory evidence
+Where users behave differently.
+Hypothesis
+What underlying user problem may explain the behaviour.
+Unknowns
+What still needs validation using first-party product data.
+The engine must ultimately answer:
+What are the strongest evidence-backed user problems behind the wishlist-to-purchase conversion gap, who experiences them, how do they behave, and which hypotheses should the Product Manager validate next?
+Do not move into product-solution design until this discovery system has produced and prioritized the problem hypotheses.
+

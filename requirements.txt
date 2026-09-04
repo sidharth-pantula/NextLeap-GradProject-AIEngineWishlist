@@ -1,0 +1,29 @@
+# Core Framework & Utilities
+python-dotenv>=1.0.0
+pydantic>=2.0.0
+requests>=2.31.0
+tqdm>=4.66.0
+
+# LLM & AI
+groq>=0.11.0
+
+# Local Embeddings & Vector Store
+sentence-transformers>=3.0.0
+chromadb>=0.5.0
+
+# Machine Learning & Analytics
+numpy>=1.26.0
+pandas>=2.2.0
+scikit-learn>=1.5.0
+hdbscan>=0.8.38
+
+# Data Ingestion & Hugging Face
+datasets>=2.20.0
+google-api-python-client>=2.130.0
+
+# Presentation Layer
+streamlit>=1.36.0
+plotly>=5.22.0
+
+# Testing
+pytest>=8.2.0

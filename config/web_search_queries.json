@@ -1,0 +1,128 @@
+{
+  "initial_test_queries": [
+    {
+      "category": "wishlist_save_behavior",
+      "query": "why do people add clothes to wishlist and not buy reddit"
+    },
+    {
+      "category": "purchase_hesitation",
+      "query": "why I hesitate buying clothes online fashion forum"
+    },
+    {
+      "category": "price_sale_waiting",
+      "query": "waiting for Myntra AJIO sale before buying clothes reddit"
+    },
+    {
+      "category": "price_drop_behavior",
+      "query": "tracking price drops fashion wishlist online shopping"
+    },
+    {
+      "category": "fit_size_uncertainty",
+      "query": "online clothes sizing problem returning because of size India"
+    },
+    {
+      "category": "reviews_social_proof",
+      "query": "checking customer photo reviews before buying clothes online"
+    },
+    {
+      "category": "product_comparison",
+      "query": "comparing clothes before buying Myntra vs AJIO reddit"
+    },
+    {
+      "category": "external_research",
+      "query": "what do shoppers search before buying clothes online fashion research"
+    },
+    {
+      "category": "indian_festival_shopping",
+      "query": "Diwali fashion sale wishlist buying impulse shopping India"
+    },
+    {
+      "category": "brand_platform_experience",
+      "query": "Myntra AJIO online shopping buying experience hesitation review"
+    }
+  ],
+  "research_categories": {
+    "A_wishlist_save_behavior": [
+      "why users save clothes to wishlist",
+      "clothes saved for later purchase intent",
+      "online shopping wishlist as bookmarking",
+      "Myntra wishlist saved items buying behaviour",
+      "AJIO saved items why not buy"
+    ],
+    "B_purchase_hesitation": [
+      "why I don't buy clothes online",
+      "why I postpone buying clothes I like",
+      "online fashion purchase hesitation reasons",
+      "clothing purchase decision making online"
+    ],
+    "C_price_and_price_drop": [
+      "waiting for price drop clothes shopping",
+      "wishlist price drop alerts online fashion",
+      "checking price history before buying clothes",
+      "online fashion price comparison India"
+    ],
+    "D_sales_and_discounts": [
+      "waiting for sale clothes online shopping",
+      "buying clothes during Myntra EORS sale",
+      "fashion sale buying behaviour discounts",
+      "delaying clothes purchase because sale coming"
+    ],
+    "E_festival_sales_india": [
+      "Diwali online shopping clothes behaviour",
+      "Myntra Diwali sale fashion wishlist",
+      "Flipkart Big Billion Days fashion shopping",
+      "Amazon Great Indian Festival clothes buying"
+    ],
+    "F_fit_and_size": [
+      "online clothes sizing problem fit uncertainty",
+      "brand sizing differences online shopping",
+      "Myntra sizing problem return size chart",
+      "how to know clothes will fit online"
+    ],
+    "G_quality_and_material": [
+      "clothes look different from photos online shopping",
+      "online clothes fabric quality disappointment",
+      "Myntra quality problem fabric review",
+      "product expectation vs reality fashion online"
+    ],
+    "H_reviews_and_social_proof": [
+      "checking reviews before buying clothes online",
+      "do customer photo reviews increase purchase confidence",
+      "Reddit reviews before buying fashion India",
+      "negative reviews causing fashion cart abandonment"
+    ],
+    "I_comparison_and_alternatives": [
+      "comparing clothes before buying Myntra vs AJIO",
+      "choosing between two dresses online shopping",
+      "looking for cheaper alternatives fashion products",
+      "searching another website before buying fashion"
+    ],
+    "J_external_research": [
+      "what do shoppers search before buying clothes online",
+      "online fashion purchase research YouTube try on",
+      "fashion product research before buying Reddit",
+      "checking size recommendation before buying clothes"
+    ],
+    "K_return_and_exchange": [
+      "online clothes return concerns exchange policy",
+      "Myntra return experience purchase decision",
+      "AJIO return refund problem online shopping"
+    ],
+    "L_availability_and_stock": [
+      "wishlist item out of stock size unavailable",
+      "waiting for size restock online clothes",
+      "fashion product stock availability notification"
+    ],
+    "M_styling_and_occasion": [
+      "unsure how to style dress before buying",
+      "buying clothes for wedding occasion online shopping",
+      "outfit buying decision occasion suitability"
+    ],
+    "N_positive_and_negative_cases": [
+      "saved item in wishlist and eventually bought why",
+      "saved item in wishlist and never bought reasons",
+      "bought clothes despite high price reason",
+      "did not buy clothes despite discount reason"
+    ]
+  }
+}

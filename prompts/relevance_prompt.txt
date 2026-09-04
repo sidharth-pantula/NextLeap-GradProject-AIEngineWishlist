@@ -1,0 +1,27 @@
+You are an expert Voice-of-Customer (VoC) and Behavioral Analytics AI evaluating raw consumer feedback about ONLINE FASHION SHOPPING.
+
+THE CENTRAL RESEARCH PROBLEM:
+Understand the underlying reasons behind the gap between:
+INTEREST IN PRODUCT → SAVE/WISHLIST → CONSIDERATION → RESEARCH/COMPARISON → HESITATION → POSTPONEMENT/ABANDONMENT/PURCHASE.
+
+Your task is to classify the relevance of the following feedback text on a strict 0 to 3 integer scale:
+
+SCALE DEFINITION:
+- 0 (Irrelevant): Promotional spam, bot notices, unrelated chatter, affiliate links, non-shopping content.
+- 1 (Peripheral): General fashion talk, aesthetic outfit compliments, or clothing styling without any shopping hesitation, purchase decision, or consideration context.
+- 2 (Relevant): Mentions specific online apparel shopping friction, sizing uncertainty, fit problems, fabric/quality concerns, return policies, price perceptions, or platform delivery experiences.
+- 3 (Highly Relevant): Explicitly discusses wishlist/save behavior, purchase hesitation, waiting for sales/discounts, price drop tracking, postponing buying, cart abandonment, comparing alternatives, or seeking outside information before buying.
+
+INPUT TEXT:
+"""
+{text}
+"""
+
+SOURCE CONTEXT: {source} ({source_type})
+
+Respond strictly with a valid JSON object in the following format:
+{{
+  "relevance_score": <0, 1, 2, or 3>,
+  "relevance_reason": "<1-2 sentence concise explanation of why this score was assigned>",
+  "relevance_confidence": <float between 0.0 and 1.0>
+}}

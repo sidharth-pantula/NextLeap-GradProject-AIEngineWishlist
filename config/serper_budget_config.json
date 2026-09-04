@@ -1,0 +1,9 @@
+{
+  "budget_mode": "FREE_ONLY",
+  "max_requests": 50,
+  "initial_test_requests": 10,
+  "pagination_enabled": false,
+  "automatic_retry_enabled": false,
+  "cache_enabled": true,
+  "require_manual_confirmation_after_batch": true
+}
