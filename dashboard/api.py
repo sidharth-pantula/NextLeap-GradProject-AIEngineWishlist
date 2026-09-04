@@ -43,11 +43,38 @@ depth_engine = WishlistDepthEngine(db=db)
 rag_engine = ResearchEngine(db=db)
 
 
+@app.on_event("startup")
+def auto_bootstrap_if_empty():
+    """Auto-populates data pipeline if SQLite database has 0 raw feedback records."""
+    try:
+        res = db.execute_query("SELECT COUNT(*) as c FROM raw_feedback")
+        count = res[0]["c"] if res else 0
+        if count == 0:
+            logger.info("Database is empty on startup. Bootstrapping data pipeline...")
+            from scripts.scale_data_pipeline import scale_all_sources
+            scale_all_sources()
+            logger.info("Database bootstrap completed.")
+    except Exception as e:
+        logger.warning(f"Auto-bootstrap check failed: {e}")
+
+
 @app.get("/api/health")
 @app.get("/health")
 def health_check():
     """Health check endpoint."""
     return {"status": "ok", "app": "Wishlist Purchase Discovery Engine"}
+
+
+@app.post("/api/bootstrap")
+def trigger_bootstrap():
+    """Manually triggers data pipeline scaling & bootstrap."""
+    try:
+        from scripts.scale_data_pipeline import scale_all_sources
+        scale_all_sources()
+        return {"status": "success", "message": "Pipeline scaled and database populated successfully"}
+    except Exception as e:
+        logger.error(f"Bootstrap failed: {e}")
+        return JSONResponse(status_code=500, content={"status": "error", "message": str(e)})
 
 
 @app.get("/", response_class=HTMLResponse)
