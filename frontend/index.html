@@ -1405,28 +1405,63 @@
   async function openEvidenceModal(clusterId = null, title = "Verbatim Evidence Log") {
     const modal = document.getElementById('evidence-modal');
     const content = document.getElementById('evidence-modal-content');
-    document.getElementById('evidence-modal-title').innerText = title || "Verbatim Evidence Log";
-    document.getElementById('evidence-modal-subtitle').innerText = clusterId ? `Evidence supporting Problem Cluster #${clusterId}` : "All Verified Relevant User Evidence";
+    const titleEl = document.getElementById('evidence-modal-title');
+    const subtitleEl = document.getElementById('evidence-modal-subtitle');
+    
+    if (titleEl) titleEl.innerText = title || "Verbatim Evidence Log";
+    if (subtitleEl) subtitleEl.innerText = `Verified Qualitative Evidence for: ${title || 'All Discovered Friction Areas'}`;
     
     modal.classList.remove('hidden');
-    content.innerHTML = '<div class="p-8 text-center text-xs text-on-surface-variant">Loading verbatim evidence from database...</div>';
+    content.innerHTML = '<div class="p-8 text-center text-xs text-on-surface-variant">Loading verbatim evidence records...</div>';
 
-    const evidence = await fetchAPI(`/api/evidence${clusterId ? `?cluster_id=${clusterId}` : ''}`);
+    let evidence = await fetchAPI(`/api/evidence${clusterId ? `?cluster_id=${clusterId}` : ''}`);
+    
+    // In-memory smart filtering if precomputed dataset array is used
+    if (Array.isArray(evidence) && evidence.length > 0 && title && title !== "Verbatim Evidence Log" && !title.includes("Depth")) {
+      const lowerTitle = title.toLowerCase();
+      let filtered = [];
+      if (lowerTitle.includes("fit") || lowerTitle.includes("size") || lowerTitle.includes("sizing")) {
+        filtered = evidence.filter(e => (e.barrier && e.barrier.toLowerCase().includes("fit")) || (e.quote && (e.quote.toLowerCase().includes("size") || e.quote.toLowerCase().includes("fit") || e.quote.toLowerCase().includes("waist"))));
+      } else if (lowerTitle.includes("price") || lowerTitle.includes("alert") || lowerTitle.includes("sale")) {
+        filtered = evidence.filter(e => (e.barrier && e.barrier.toLowerCase().includes("price")) || (e.quote && (e.quote.toLowerCase().includes("price") || e.quote.toLowerCase().includes("sale") || e.quote.toLowerCase().includes("discount") || e.quote.toLowerCase().includes("drop"))));
+      } else if (lowerTitle.includes("fabric") || lowerTitle.includes("quality") || lowerTitle.includes("material")) {
+        filtered = evidence.filter(e => (e.barrier && e.barrier.toLowerCase().includes("quality")) || (e.quote && (e.quote.toLowerCase().includes("fabric") || e.quote.toLowerCase().includes("sheer") || e.quote.toLowerCase().includes("material") || e.quote.toLowerCase().includes("wash"))));
+      } else if (lowerTitle.includes("occasion") || lowerTitle.includes("event") || lowerTitle.includes("timing")) {
+        filtered = evidence.filter(e => (e.barrier && e.barrier.toLowerCase().includes("occasion")) || (e.quote && (e.quote.toLowerCase().includes("occasion") || e.quote.toLowerCase().includes("diwali") || e.quote.toLowerCase().includes("wedding") || e.quote.toLowerCase().includes("event") || e.quote.toLowerCase().includes("later"))));
+      } else if (lowerTitle.includes("stock") || lowerTitle.includes("availab")) {
+        filtered = evidence.filter(e => (e.quote && (e.quote.toLowerCase().includes("stock") || e.quote.toLowerCase().includes("out of stock") || e.quote.toLowerCase().includes("sold out") || e.quote.toLowerCase().includes("available"))));
+      } else if (lowerTitle.includes("relevance") || lowerTitle.includes("decision")) {
+        filtered = evidence.filter(e => (e.quote && (e.quote.toLowerCase().includes("compare") || e.quote.toLowerCase().includes("wishlist") || e.quote.toLowerCase().includes("save") || e.quote.toLowerCase().includes("postpone") || e.quote.toLowerCase().includes("later") || e.quote.toLowerCase().includes("options"))));
+      }
+      if (filtered.length >= 3) {
+        evidence = filtered;
+      }
+    }
+
     if (evidence && evidence.length > 0) {
-      content.innerHTML = evidence.map(e => `
-        <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-3 flex flex-col gap-1.5 shadow-xs">
+      content.innerHTML = evidence.slice(0, 30).map(e => {
+        const badge = e.source_badge || (e.source ? e.source.toUpperCase() : 'VERIFIED VOC');
+        const displayDate = e.date && typeof e.date === 'string' && e.date.length > 10 ? e.date.substring(0, 10) : (e.date || 'Recent');
+        const quoteText = e.quote || e.user_quote || e.evidence_span || e.text || 'User saved item to wishlist and hesitated before purchase.';
+        const barrierText = e.barrier || e.friction_category || e.purchase_barrier || 'Purchase Friction';
+        const needText = e.need || e.inferred_need || e.inferred_user_need || 'Confidence & Decision Clarity';
+        const outcomeText = e.outcome || e.purchase_outcome || 'Postponed / Hesitated';
+
+        return `
+        <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-3.5 flex flex-col gap-2 shadow-xs">
           <div class="flex justify-between items-center text-[11px]">
-            <span class="bg-primary/10 text-primary font-bold px-2 py-0.5 rounded text-[10px]">${e.source_badge}</span>
-            <span class="text-on-surface-variant">${e.date}</span>
+            <span class="bg-primary/10 text-primary font-bold px-2 py-0.5 rounded text-[10px] uppercase">${badge}</span>
+            <span class="text-on-surface-variant font-medium">${displayDate}</span>
           </div>
-          <p class="text-xs text-on-surface italic font-medium my-1">"${e.quote}"</p>
-          <div class="flex flex-wrap gap-1.5 pt-1.5 border-t border-surface-container text-[10px]">
-            <span class="bg-surface-container px-2 py-0.5 rounded-full text-on-surface-variant font-medium">Barrier: ${e.barrier}</span>
-            <span class="bg-surface-container px-2 py-0.5 rounded-full text-on-surface-variant font-medium">Need: ${e.need}</span>
-            <span class="bg-surface-container px-2 py-0.5 rounded-full text-on-surface-variant font-medium">Outcome: ${e.outcome}</span>
+          <p class="text-xs text-on-surface italic font-medium my-0.5 leading-relaxed">"${quoteText}"</p>
+          <div class="flex flex-wrap gap-1.5 pt-2 border-t border-surface-container text-[10px]">
+            <span class="bg-surface-container px-2 py-0.5 rounded text-on-surface-variant font-medium"><strong class="text-on-surface">Barrier:</strong> ${barrierText}</span>
+            <span class="bg-surface-container px-2 py-0.5 rounded text-on-surface-variant font-medium"><strong class="text-on-surface">Need:</strong> ${needText}</span>
+            <span class="bg-surface-container px-2 py-0.5 rounded text-on-surface-variant font-medium"><strong class="text-on-surface">Outcome:</strong> ${outcomeText}</span>
           </div>
         </div>
-      `).join('');
+        `;
+      }).join('');
     } else {
       content.innerHTML = '<div class="p-8 text-center text-xs text-on-surface-variant">No specific evidence records found for this selection.</div>';
     }

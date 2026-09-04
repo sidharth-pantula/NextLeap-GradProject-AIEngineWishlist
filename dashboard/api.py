@@ -267,33 +267,7 @@ def get_purchase_barriers() -> List[Dict[str, Any]]:
 @app.get("/api/opportunities")
 def get_opportunities() -> List[Dict[str, Any]]:
     """Returns prioritized opportunity areas per the 8-part PM Framework."""
-    scored = opp_engine.prioritize_and_store_opportunities()
-    if scored:
-        res = []
-        for r in scored[:5]:
-            rank_label = "HIGH PRIORITY" if r["priority_rank"] == 1 else ("MEDIUM PRIORITY" if r["priority_rank"] == 2 else "EMERGING")
-            res.append({
-                "cluster_id": r["cluster_id"],
-                "rank": r["priority_rank"],
-                "rank_label": rank_label,
-                "title": r["problem"],
-                "problem": r["problem"],
-                "observed_behaviour": r.get("observed_behaviour", ""),
-                "evidence_frequency": r.get("evidence_frequency", f"{r['frequency']} items"),
-                "purchase_relevance": r.get("purchase_relevance", "High"),
-                "potential_trigger": r.get("potential_trigger", ""),
-                "current_workaround": r.get("current_workaround", ""),
-                "potential_opportunity": r.get("potential_opportunity", ""),
-                "why_this_matters": r.get("why_this_matters", ""),
-                "description": r.get("potential_opportunity") or r.get("strategic_rationale", ""),
-                "prevalence_pct": r["prevalence_pct"],
-                "opportunity_score": r["opportunity_score"],
-                "evidence_count": r["frequency"],
-                "purchase_linkage": r["purchase_linkage_score"]
-            })
-        return res
-
-    return []
+    return activation_engine.get_activation_opportunities()
 
 
 @app.get("/api/wishlist/intent")

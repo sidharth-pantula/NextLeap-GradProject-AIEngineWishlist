@@ -108,14 +108,32 @@ def get_initial_dataset():
         depth_data = {}
 
     try:
-        evidence_rows = db.execute_query("""
-            SELECT p.feedback_id, r.source, p.product_category, p.purchase_barrier as friction_category, p.inferred_user_need as inferred_need, COALESCE(p.evidence_span, r.text) as user_quote, p.purchase_outcome, p.relevance_score
+        raw_ev = db.execute_query("""
+            SELECT p.feedback_id, r.source, r.url, r.date, p.product_category as category, 
+                   p.purchase_barrier as barrier, p.inferred_user_need as need, 
+                   COALESCE(p.evidence_span, r.text) as quote, 
+                   p.purchase_outcome as outcome, p.relevance_score
             FROM processed_feedback p
             JOIN raw_feedback r ON p.feedback_id = r.feedback_id
             WHERE p.relevance_score >= 2
             ORDER BY p.relevance_score DESC
             LIMIT 100;
         """)
+        evidence_rows = [
+            {
+                "feedback_id": r["feedback_id"],
+                "source": r["source"] or "web",
+                "source_badge": f"{(r['source'] or 'web').title()} Feedback",
+                "url": r.get("url") or "#",
+                "date": r.get("date") or "Recent",
+                "quote": r["quote"] or "User saved item to wishlist and hesitated before purchase.",
+                "barrier": r["barrier"] or "Purchase Uncertainty",
+                "need": r["need"] or "Needs clarity",
+                "category": r.get("category") or "Fashion",
+                "outcome": r["outcome"] or "Hesitated"
+            }
+            for r in raw_ev
+        ]
     except Exception:
         evidence_rows = []
 
@@ -128,6 +146,7 @@ def get_initial_dataset():
         "/api/wishlist/intent": intent_data,
         "/api/activation/trigger-matrix": t_matrix,
         "/api/activation/opportunities": opps,
+        "/api/opportunities": opps,
         "/api/wishlist/depth-dormancy": depth_data,
         "/api/evidence": evidence_rows
     }

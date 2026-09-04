@@ -59,6 +59,7 @@ def export_all():
         "/api/wishlist/intent": je.get_intent_metrics(),
         "/api/activation/trigger-matrix": ae.get_purchase_trigger_matrix(),
         "/api/activation/opportunities": ae.get_activation_opportunities(),
+        "/api/opportunities": ae.get_activation_opportunities(),
         "/api/wishlist/depth-dormancy": de.get_wishlist_depth_metrics(),
         "/api/evidence": evidence
     }
