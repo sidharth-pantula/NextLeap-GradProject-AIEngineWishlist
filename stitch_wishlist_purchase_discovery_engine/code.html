@@ -1051,6 +1051,11 @@
   }
 
   async function fetchAPI(endpoint) {
+    const cleanEndpoint = endpoint.split('?')[0];
+    if (window.__INITIAL_DATA__ && window.__INITIAL_DATA__[cleanEndpoint]) {
+      updateApiStatusIndicator(true);
+      return window.__INITIAL_DATA__[cleanEndpoint];
+    }
     try {
       const res = await fetch(`${API_BASE}${endpoint}`);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
