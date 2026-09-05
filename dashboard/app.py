@@ -7,6 +7,9 @@ import streamlit.components.v1 as components
 
 # Ensure root directory is in sys.path
 CWD = os.path.dirname(os.path.abspath(__file__))
+ROOT_DIR = os.path.dirname(CWD) if os.path.basename(CWD) == "dashboard" else CWD
+if ROOT_DIR not in sys.path:
+    sys.path.insert(0, ROOT_DIR)
 if CWD not in sys.path:
     sys.path.insert(0, CWD)
 
@@ -47,7 +50,9 @@ st.markdown("""
 @st.cache_resource
 def get_initial_dataset():
     """Loads pre-computed ground-truth analytical dataset or falls back to live DB."""
-    precomputed_file = os.path.join(CWD, "data", "precomputed_dataset.json")
+    precomputed_file = os.path.join(ROOT_DIR, "data", "precomputed_dataset.json")
+    if not os.path.exists(precomputed_file):
+        precomputed_file = os.path.join(CWD, "data", "precomputed_dataset.json")
     if os.path.exists(precomputed_file):
         try:
             with open(precomputed_file, "r", encoding="utf-8") as f:
@@ -137,7 +142,11 @@ def render_dashboard():
     data_payload = get_initial_dataset()
     json_data = json.dumps(data_payload)
 
-    html_path = os.path.join(CWD, "stitch_wishlist_purchase_discovery_engine", "code.html")
+    html_path = os.path.join(ROOT_DIR, "stitch_wishlist_purchase_discovery_engine", "code.html")
+    if not os.path.exists(html_path):
+        html_path = os.path.join(ROOT_DIR, "index.html")
+    if not os.path.exists(html_path):
+        html_path = os.path.join(CWD, "stitch_wishlist_purchase_discovery_engine", "code.html")
     if not os.path.exists(html_path):
         html_path = os.path.join(CWD, "index.html")
 

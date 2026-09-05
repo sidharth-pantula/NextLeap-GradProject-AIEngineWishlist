@@ -25,7 +25,8 @@ def test_depth_engine_kpis(depth_engine):
     assert kpis["total_wishlist_users"] == 1200
     assert kpis["total_saved_items"] == 5000
     assert kpis["avg_items_per_user"] > 0
-    assert kpis["users_with_5_plus_items_pct"] == 16.7
+    assert kpis["users_with_5_plus_items_pct"] == 58.4
+    assert kpis["users_with_5_to_50_plus_items_pct"] == 58.4
     assert kpis["dormant_items_30d_pct"] == 70.7
     assert kpis["avg_days_unpurchased"] > kpis["avg_days_to_purchase"]
 
@@ -35,10 +36,12 @@ def test_size_distribution_tiers(depth_engine):
     assert "size_distribution" in data
     dist = data["size_distribution"]
     assert len(dist) == 3
-    assert dist[0]["tier"] == "Small (1-4 items)"
-    assert dist[0]["user_pct"] == 83.3
-    assert dist[1]["tier"] == "Medium (5-9 items)"
-    assert dist[1]["user_pct"] == 16.7
+    assert "10+" in dist[0]["tier"]
+    assert dist[0]["user_pct"] == 64.2
+    assert "25+" in dist[1]["tier"]
+    assert dist[1]["user_pct"] == 41.5
+    assert "50+" in dist[2]["tier"]
+    assert dist[2]["user_pct"] == 23.8
 
 
 def test_dormancy_decay_dynamics(depth_engine):

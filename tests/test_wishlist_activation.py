@@ -32,7 +32,7 @@ def test_wishlist_behavioral_metrics(activation_engine):
 
 
 def test_ecommerce_funnel_benchmark(activation_engine):
-    """Test general clickstream progression benchmark."""
+    """Test clickstream progression benchmark with wishlist and cart transitions."""
     bench = activation_engine.get_ecommerce_funnel_benchmark()
     
     assert bench["total_events"] > 0
@@ -41,6 +41,9 @@ def test_ecommerce_funnel_benchmark(activation_engine):
     assert bench["purchases"] > 0
     assert 5.0 <= bench["view_to_cart_pct"] <= 30.0
     assert 10.0 <= bench["cart_to_purchase_pct"] <= 60.0
+    assert bench["view_to_wishlist_pct"] > 0
+    assert bench["wishlist_to_cart_pct"] > 0
+    assert bench["wishlist_cart_to_purchase_pct"] > 0
     assert "REES46" in bench["data_source"]
 
 
