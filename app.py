@@ -21,17 +21,35 @@ st.set_page_config(
 # Hide Streamlit Default Chrome & Padding for full-screen Stitch UI
 st.markdown("""
 <style>
-    #MainMenu {visibility: hidden;}
-    header {visibility: hidden;}
-    footer {visibility: hidden;}
-    .stDeployButton {display:none;}
-    div[data-testid="stToolbar"] {visibility: hidden;}
-    div[data-testid="stDecoration"] {visibility: hidden;}
-    div[data-testid="stStatusWidget"] {visibility: hidden;}
+    #MainMenu {display: none !important;}
+    header {display: none !important;}
+    footer {display: none !important;}
+    .stDeployButton {display: none !important;}
+    div[data-testid="stToolbar"] {display: none !important;}
+    div[data-testid="stDecoration"] {display: none !important;}
+    div[data-testid="stStatusWidget"] {display: none !important;}
+    div[data-testid="stHeader"] {display: none !important;}
+    .stApp {
+        height: 100vh !important;
+        overflow: hidden !important;
+    }
+    div[data-testid="stAppViewContainer"] {
+        padding: 0 !important;
+        overflow: hidden !important;
+    }
+    section.main {
+        padding: 0 !important;
+    }
     .block-container {
         padding: 0 !important;
         margin: 0 !important;
         max-width: 100% !important;
+        height: 100vh !important;
+        overflow: hidden !important;
+    }
+    div[data-testid="stCustomComponentV1"] {
+        height: 100vh !important;
+        width: 100% !important;
     }
     iframe {
         width: 100vw !important;
